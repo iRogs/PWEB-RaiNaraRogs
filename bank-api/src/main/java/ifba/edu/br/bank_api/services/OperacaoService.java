@@ -1,11 +1,11 @@
 package ifba.edu.br.bank_api.services;
 
+import ifba.edu.br.bank_api.Client.EmailClient;
 import ifba.edu.br.bank_api.models.Conta;
 import ifba.edu.br.bank_api.models.Operacao;
 import ifba.edu.br.bank_api.models.TipoOperacao;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.OperacaoRepository;
-import ifba.edu.br.bank_api.services.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,9 @@ import java.util.Optional;
 
 @Service
 public class OperacaoService {
-
     private final ContaRepository accountRepository;
     private final OperacaoRepository operacaoRepository;
-    private final EmailService emailService;
+    private final EmailClient emailService;
 
     private void salvarOperacao(Conta conta, TipoOperacao tipo, BigDecimal valor, String descricao) {
         Operacao operacao = new Operacao();
