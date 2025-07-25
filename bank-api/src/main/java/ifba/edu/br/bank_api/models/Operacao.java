@@ -20,5 +20,4 @@ public class Operacao {
     Float valor;
     @ManyToOne
     Conta conta;
-
 }
