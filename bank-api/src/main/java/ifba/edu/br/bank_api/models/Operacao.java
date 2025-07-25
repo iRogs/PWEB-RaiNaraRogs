@@ -20,7 +20,6 @@ public class Operacao {
 
     @ManyToOne
     private Conta conta;
-
     public Operacao() {}
 
     // Getters e Setters
