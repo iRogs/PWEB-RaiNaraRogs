@@ -40,5 +40,4 @@ public class UsuarioService {
         return new UsuarioDTO(novoUsuario);
     }
 
-
 }

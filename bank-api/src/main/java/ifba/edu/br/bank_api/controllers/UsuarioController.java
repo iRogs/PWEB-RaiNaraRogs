@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
+    
     private final UsuarioService usuarioService;
     
     public UsuarioController (UsuarioService usuarioService){
@@ -28,4 +29,5 @@ public class UsuarioController {
         URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(novoUsuario.id()).toUri();
         return ResponseEntity.created(uri).body(novoUsuario);
     }
+
 }

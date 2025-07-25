@@ -16,12 +16,10 @@ import java.util.Optional;
 
 @Service
 public class OperacaoService {
+    
     private final ContaRepository contaRepository;
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
-    
-
-   
 
     public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
         this.contaRepository = contaRepository;
