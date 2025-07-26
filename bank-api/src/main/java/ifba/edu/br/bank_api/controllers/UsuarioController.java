@@ -42,6 +42,7 @@ public class UsuarioController {
         UsuarioDTO novoUsuario = usuarioService.cadastrar(form);
         URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(novoUsuario.id()).toUri();
         return ResponseEntity.created(uri).body(novoUsuario);
+        
     }
 
     @PostMapping("/login")

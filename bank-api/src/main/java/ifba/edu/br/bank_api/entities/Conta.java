@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "contas")
@@ -20,7 +21,7 @@ public class Conta {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    
+    @NotBlank
     private String agencia;
     private BigDecimal saldo;
     @OneToMany(mappedBy = "conta")
