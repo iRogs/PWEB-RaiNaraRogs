@@ -1,6 +1,7 @@
 package ifba.edu.br.bank_api.services;
 
 import ifba.edu.br.bank_api.Client.EmailClient;
+import ifba.edu.br.bank_api.Client.EmailDTO;
 import ifba.edu.br.bank_api.models.Conta;
 import ifba.edu.br.bank_api.models.Operacao;
 import ifba.edu.br.bank_api.models.TipoOperacao;
@@ -21,10 +22,10 @@ public class OperacaoService {
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
 
-    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
+    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository, EmailClient client) {
         this.contaRepository = contaRepository;
         this.operacaoRepository = operacaoRepository;
-        this.emailService = emailService;
+        this.emailService = client;
     }
 
     private void salvarOperacao(Conta conta, TipoOperacao tipo, BigDecimal valor, String descricao) {
@@ -106,13 +107,14 @@ public class OperacaoService {
     }
 
     private void enviarEmail(Conta conta, String operacao, BigDecimal valor) {
-        emailService.sendEmail(
+
+        EmailDTO email = new EmailDTO("rbrodrigo3@gmail.com",
                 conta.getEmail(),
                 operacao + " Realizado com Sucesso",
                 "Olá " + conta.getUserAccountName() + ",\n\n" +
                 operacao + " de R$ " + valor + " realizado com sucesso.\n" +
-                "Saldo atual: R$ " + conta.getSaldo()
-        );
+                "Saldo atual: R$ " + conta.getSaldo());
+        emailService.sendEmail(email);
     }
 
 }
