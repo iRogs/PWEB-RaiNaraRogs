@@ -7,22 +7,20 @@ import ifba.edu.br.bank_api.models.Operacao;
 import ifba.edu.br.bank_api.models.TipoOperacao;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.OperacaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OperacaoService {
-    
+
     private final ContaRepository contaRepository;
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
 
-    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository, EmailClient client) {
+    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
         this.contaRepository = contaRepository;
         this.operacaoRepository = operacaoRepository;
         this.emailService = client;
@@ -107,14 +105,13 @@ public class OperacaoService {
     }
 
     private void enviarEmail(Conta conta, String operacao, BigDecimal valor) {
-
-        EmailDTO email = new EmailDTO("rbrodrigo3@gmail.com",
+        emailService.sendEmail(
                 conta.getEmail(),
                 operacao + " Realizado com Sucesso",
                 "Olá " + conta.getUserAccountName() + ",\n\n" +
                 operacao + " de R$ " + valor + " realizado com sucesso.\n" +
-                "Saldo atual: R$ " + conta.getSaldo());
-        emailService.sendEmail(email);
+                "Saldo atual: R$ " + conta.getSaldo()
+        );
     }
 
 }

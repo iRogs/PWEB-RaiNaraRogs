@@ -1,14 +1,20 @@
 package ifba.edu.br.bank_api.controllers;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
+import ifba.edu.br.bank_api.models.Operacao;
+import ifba.edu.br.bank_api.models.TipoOperacao;
 import ifba.edu.br.bank_api.services.OperacaoService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
@@ -43,5 +49,16 @@ public class OperacaoController {
         URI uri = uriBuilder.path("/operacoes/pagar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
     }
-    
+
+    @GetMapping("/extrato")
+    public ResponseEntity<List<Operacao>> consultarExtrato(
+        @RequestParam Long contaId,
+        @RequestParam(required = false) TipoOperacao tipo,
+        @RequestParam LocalDateTime inicio,
+        @RequestParam LocalDateTime fim
+    ) {
+        List<Operacao> extrato = operacaoService.extrato(contaId, tipo, inicio, fim);
+        return ResponseEntity.ok(extrato);
+    }
+
 }
