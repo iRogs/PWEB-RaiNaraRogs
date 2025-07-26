@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
-import ifba.edu.br.bank_api.models.Operacao;
-import ifba.edu.br.bank_api.models.TipoOperacao;
+import ifba.edu.br.bank_api.entities.Operacao;
+import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.services.OperacaoService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;

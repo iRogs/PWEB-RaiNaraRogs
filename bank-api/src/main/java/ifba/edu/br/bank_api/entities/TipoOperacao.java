@@ -1,4 +1,4 @@
-package ifba.edu.br.bank_api.models;
+package ifba.edu.br.bank_api.entities;
 
 public enum TipoOperacao {
     DEPOSITO,

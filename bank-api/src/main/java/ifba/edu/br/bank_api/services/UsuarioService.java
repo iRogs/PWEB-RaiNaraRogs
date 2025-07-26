@@ -1,6 +1,7 @@
 package ifba.edu.br.bank_api.services;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,8 +11,8 @@ import ifba.edu.br.bank_api.Client.EmailDTO;
 import ifba.edu.br.bank_api.Client.EmailClient;
 import ifba.edu.br.bank_api.dtos.UsuarioDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioForm;
-import ifba.edu.br.bank_api.models.Conta;
-import ifba.edu.br.bank_api.models.Usuario;
+import ifba.edu.br.bank_api.entities.Conta;
+import ifba.edu.br.bank_api.entities.Usuario;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -42,8 +43,7 @@ public class UsuarioService {
         conta.setAgencia("0001");
         conta.setSaldo(BigDecimal.ZERO);
         contaRepository.save(conta);
-
-        Usuario novoUsuario = new Usuario(form.nome(), form.email(), form.cpf(), senhaHash, conta);
+        Usuario novoUsuario = new Usuario(form.nome(), form.email(), form.cpf(), senhaHash, conta, LocalDateTime.now());
         usuarioRepository.save(novoUsuario);
 
         enviarEmailBoasVindas(novoUsuario);

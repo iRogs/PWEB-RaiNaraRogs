@@ -2,9 +2,9 @@ package ifba.edu.br.bank_api.services;
 
 import ifba.edu.br.bank_api.Client.EmailClient;
 import ifba.edu.br.bank_api.Client.EmailDTO;
-import ifba.edu.br.bank_api.models.Conta;
-import ifba.edu.br.bank_api.models.Operacao;
-import ifba.edu.br.bank_api.models.TipoOperacao;
+import ifba.edu.br.bank_api.entities.Conta;
+import ifba.edu.br.bank_api.entities.Operacao;
+import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.OperacaoRepository;
 import org.springframework.stereotype.Service;

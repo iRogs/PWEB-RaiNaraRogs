@@ -1,5 +1,6 @@
-package ifba.edu.br.bank_api.models;
+package ifba.edu.br.bank_api.entities;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,22 +21,24 @@ public class Usuario implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String nome;
     private String cpf;
     private String email;
     private String senha;
     @OneToOne
     private Conta conta;
-
+    private LocalDateTime dataCadastro;
+    
     public Usuario(){}
 
-    public Usuario(String nome, String email, String cpf, String senha, Conta conta){
+    public Usuario(String nome, String email, String cpf, String senha, Conta conta, LocalDateTime dataCadastro){
         this.conta = conta;
         this.email = email;
         this.cpf = cpf;
         this.nome = nome;
         this.senha = senha;
+        this.dataCadastro = dataCadastro;
     }
 
     public Long getId() {
@@ -99,5 +102,13 @@ public class Usuario implements UserDetails{
     @Override
     public String getUsername() {
        return this.nome;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 }

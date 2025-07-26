@@ -1,4 +1,4 @@
-package ifba.edu.br.bank_api.models;
+package ifba.edu.br.bank_api.entities;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ public class Conta {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
+    
     private String agencia;
     private BigDecimal saldo;
     @OneToMany(mappedBy = "conta")
