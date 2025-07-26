@@ -20,7 +20,7 @@ public class OperacaoService {
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
 
-    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
+    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository, EmailClient client) {
         this.contaRepository = contaRepository;
         this.operacaoRepository = operacaoRepository;
         this.emailService = client;
@@ -105,13 +105,14 @@ public class OperacaoService {
     }
 
     private void enviarEmail(Conta conta, String operacao, BigDecimal valor) {
-        emailService.sendEmail(
+
+        EmailDTO email = new EmailDTO("rbrodrigo3@gmail.com",
                 conta.getEmail(),
                 operacao + " Realizado com Sucesso",
                 "Olá " + conta.getUserAccountName() + ",\n\n" +
                 operacao + " de R$ " + valor + " realizado com sucesso.\n" +
-                "Saldo atual: R$ " + conta.getSaldo()
-        );
+                "Saldo atual: R$ " + conta.getSaldo());
+        emailService.sendEmail(email);
     }
 
 }
