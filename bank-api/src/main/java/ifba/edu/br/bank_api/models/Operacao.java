@@ -14,15 +14,14 @@ public class Operacao {
 
     @Enumerated(EnumType.STRING)
     private TipoOperacao tipo;
+    private BigDecimal valor;    
     private LocalDateTime data;
-    private BigDecimal valor;
     private String descricao;
 
     @ManyToOne
     private Conta conta;
     public Operacao() {}
 
-    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -71,5 +70,5 @@ public class Operacao {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
+
 }
