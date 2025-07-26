@@ -16,9 +16,16 @@ import java.util.Optional;
 
 @Service
 public class OperacaoService {
-    private final ContaRepository accountRepository;
+    
+    private final ContaRepository contaRepository;
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
+
+    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
+        this.contaRepository = contaRepository;
+        this.operacaoRepository = operacaoRepository;
+        this.emailService = emailService;
+    }
 
     private void salvarOperacao(Conta conta, TipoOperacao tipo, BigDecimal valor, String descricao) {
         Operacao operacao = new Operacao();
@@ -37,7 +44,7 @@ public class OperacaoService {
 
         Conta conta = findAccount(accountId);
         conta.setSaldo(conta.getSaldo().add(amount));
-        accountRepository.save(conta);
+        contaRepository.save(conta);
 
         salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "Depósito");
         enviarEmail(conta, "Depósito", amount);
@@ -56,7 +63,7 @@ public class OperacaoService {
         }
 
         conta.setSaldo(conta.getSaldo().subtract(amount));
-        accountRepository.save(conta);
+        contaRepository.save(conta);
 
         salvarOperacao(conta, TipoOperacao.SAQUE, amount, "Saque");
         enviarEmail(conta, "Saque", amount);
@@ -76,7 +83,7 @@ public class OperacaoService {
         }
 
         conta.setSaldo(conta.getSaldo().subtract(amount));
-        accountRepository.save(conta);
+        contaRepository.save(conta);
         salvarOperacao(conta, TipoOperacao.PAGAMENTO, amount, descricao);
         enviarEmail(conta, "Pagamento: " + descricao, amount);
 
@@ -94,7 +101,7 @@ public class OperacaoService {
     }
 
     private Conta findAccount(Long accountId) {
-        return accountRepository.findById(accountId)
+        return contaRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada."));
     }
 

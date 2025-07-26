@@ -1,5 +1,7 @@
 package ifba.edu.br.bank_api.services;
 
+import java.math.BigDecimal;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class UsuarioService {
         String senhaHash =  new BCryptPasswordEncoder().encode(form.senha());
         Conta conta = new Conta();
         conta.setAgencia("0001");
-        conta.setSaldo(0.0f);
+        conta.setSaldo(BigDecimal.ZERO);
         contaRepository.save(conta);
 
         Usuario novoUsuario = new Usuario(form.nome(), form.email(), form.cpf(), senhaHash, conta);
@@ -37,6 +39,5 @@ public class UsuarioService {
         //noticifacaoClient.sendEmail(email de boas vindas)
         return new UsuarioDTO(novoUsuario);
     }
-
 
 }
