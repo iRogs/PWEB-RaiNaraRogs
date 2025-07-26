@@ -1,6 +1,6 @@
 package ifba.edu.br.bank_api.dtos;
 
-import ifba.edu.br.bank_api.models.Usuario;
+import ifba.edu.br.bank_api.entities.Usuario;
 
 public record UsuarioDTO(Long id, String nome, String email) {
 
