@@ -20,10 +20,10 @@ public class OperacaoService {
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
 
-    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository, EmailClient emailService) {
+    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
         this.contaRepository = contaRepository;
         this.operacaoRepository = operacaoRepository;
-        this.emailService = emailService;
+        this.emailService = client;
     }
 
     private void salvarOperacao(Conta conta, TipoOperacao tipo, BigDecimal valor, String descricao) {
@@ -105,19 +105,13 @@ public class OperacaoService {
     }
 
     private void enviarEmail(Conta conta, String operacao, BigDecimal valor) {
-        String assunto = operacao + " Realizado com Sucesso";
-        String corpo = "Olá " + conta.getUserAccountName() + ",\n\n" +
-                    operacao + " de R$ " + valor + " realizado com sucesso.\n" +
-                    "Saldo atual: R$ " + conta.getSaldo();
-
-        EmailDTO email = new EmailDTO(
-            "no-reply@bank.com",
-            conta.getEmail(),              
-            assunto,                       
-            corpo                          
+        emailService.sendEmail(
+                conta.getEmail(),
+                operacao + " Realizado com Sucesso",
+                "Olá " + conta.getUserAccountName() + ",\n\n" +
+                operacao + " de R$ " + valor + " realizado com sucesso.\n" +
+                "Saldo atual: R$ " + conta.getSaldo()
         );
-
-        emailService.sendEmail(email);
     }
 
 }
