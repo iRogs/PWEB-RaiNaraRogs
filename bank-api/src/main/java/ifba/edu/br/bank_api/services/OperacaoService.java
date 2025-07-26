@@ -83,7 +83,6 @@ public class OperacaoService {
 
         conta.setSaldo(conta.getSaldo().subtract(amount));
         contaRepository.save(conta);
-        salvarOperacao(conta, TipoOperacao.PAGAMENTO, amount, descricao);
         enviarEmail(conta, "Pagamento: " + descricao, amount);
 
         return "Pagamento realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
