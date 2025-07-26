@@ -2,6 +2,7 @@ package ifba.edu.br.bank_api.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,12 +16,12 @@ public class Operacao {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @NotNull
     private TipoOperacao tipo;
-    @NotBlank
+    @NotNull
     private BigDecimal valor;  
     private LocalDateTime data;
-    @NotBlank
+    @NotNull
     private String descricao;
 
     @ManyToOne

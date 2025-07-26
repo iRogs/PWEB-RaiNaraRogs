@@ -40,12 +40,13 @@ public class UsuarioService implements UserDetailsService{
 
     @Transactional
     public UsuarioDTO cadastrar(UsuarioForm form){
-        String senhaHash = this.passwordEncoder.encode(form.senha());
+        String senhaHash = passwordEncoder.encode(form.senha());
         Conta conta = new Conta();
         conta.setAgencia("0001");
         conta.setSaldo(BigDecimal.ZERO);
         contaRepository.save(conta);
         Usuario novoUsuario = new Usuario(form.nome(), form.email(), form.cpf(), senhaHash, conta, LocalDateTime.now());
+        conta.setUsuario(novoUsuario); 
         usuarioRepository.save(novoUsuario);
 
         enviarEmailBoasVindas(novoUsuario);
