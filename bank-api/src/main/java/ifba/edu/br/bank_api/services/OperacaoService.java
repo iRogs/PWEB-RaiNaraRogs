@@ -1,22 +1,21 @@
 package ifba.edu.br.bank_api.services;
 
 import ifba.edu.br.bank_api.Client.EmailClient;
+import ifba.edu.br.bank_api.Client.EmailDTO;
 import ifba.edu.br.bank_api.models.Conta;
 import ifba.edu.br.bank_api.models.Operacao;
 import ifba.edu.br.bank_api.models.TipoOperacao;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.OperacaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OperacaoService {
-    
+
     private final ContaRepository contaRepository;
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
@@ -106,13 +105,19 @@ public class OperacaoService {
     }
 
     private void enviarEmail(Conta conta, String operacao, BigDecimal valor) {
-        emailService.sendEmail(
-                conta.getEmail(),
-                operacao + " Realizado com Sucesso",
-                "Olá " + conta.getUserAccountName() + ",\n\n" +
-                operacao + " de R$ " + valor + " realizado com sucesso.\n" +
-                "Saldo atual: R$ " + conta.getSaldo()
+        String assunto = operacao + " Realizado com Sucesso";
+        String corpo = "Olá " + conta.getUserAccountName() + ",\n\n" +
+                    operacao + " de R$ " + valor + " realizado com sucesso.\n" +
+                    "Saldo atual: R$ " + conta.getSaldo();
+
+        EmailDTO email = new EmailDTO(
+            "no-reply@bank.com",
+            conta.getEmail(),              
+            assunto,                       
+            corpo                          
         );
+
+        emailService.sendEmail(email);
     }
 
 }
