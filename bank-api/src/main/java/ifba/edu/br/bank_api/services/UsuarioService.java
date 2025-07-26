@@ -3,7 +3,9 @@ package ifba.edu.br.bank_api.services;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ import ifba.edu.br.bank_api.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService{
     private final UsuarioRepository usuarioRepository;
     private final ContaRepository contaRepository;
     private final PasswordEncoder passwordEncoder;
@@ -38,7 +40,7 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDTO cadastrar(UsuarioForm form){
-        String senhaHash = new BCryptPasswordEncoder().encode(form.senha());
+        String senhaHash = this.passwordEncoder.encode(form.senha());
         Conta conta = new Conta();
         conta.setAgencia("0001");
         conta.setSaldo(BigDecimal.ZERO);
@@ -64,6 +66,16 @@ public class UsuarioService {
         );
 
         emailService.sendEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDetails user = usuarioRepository.findByEmail(username);
+        if (user == null) {
+            // Esta exceção é exigida pelo contrato do Spring Security
+            throw new UsernameNotFoundException("Dados de login inválidos!");
+        }
+        return user;
     }
 
 }

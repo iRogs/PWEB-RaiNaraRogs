@@ -2,32 +2,54 @@ package ifba.edu.br.bank_api.controllers;
 
 import java.net.URI;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import ch.qos.logback.core.subst.Token;
+import feign.Response;
+import ifba.edu.br.bank_api.dtos.LoginDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioForm;
+import ifba.edu.br.bank_api.dtos.TokenDTO;
+import ifba.edu.br.bank_api.entities.Usuario;
+import ifba.edu.br.bank_api.services.JWTokenService;
 import ifba.edu.br.bank_api.services.UsuarioService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
     
     private final UsuarioService usuarioService;
-    
-    public UsuarioController (UsuarioService usuarioService){
+    private final AuthenticationManager authenticationManager;
+    private final JWTokenService tokenService;
+     
+    public UsuarioController (UsuarioService usuarioService, AuthenticationManager authenticationManager, JWTokenService tokenService){
         this.usuarioService = usuarioService;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/cadastrar")
     public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody UsuarioForm form, UriComponentsBuilder uriBuilder) {
+        System.out.println("DTO Recebido: " + form.toString());
         UsuarioDTO novoUsuario = usuarioService.cadastrar(form);
         URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(novoUsuario.id()).toUri();
         return ResponseEntity.created(uri).body(novoUsuario);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO dto){
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
+        var authentication = authenticationManager.authenticate(authenticationToken);
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        return ResponseEntity.ok(new TokenDTO(tokenJWT));
     }
 
 }

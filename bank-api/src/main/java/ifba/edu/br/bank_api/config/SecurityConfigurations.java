@@ -33,6 +33,7 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.POST, "/usuarios/cadastrar").permitAll()
                 .anyRequest().authenticated()
                 )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
