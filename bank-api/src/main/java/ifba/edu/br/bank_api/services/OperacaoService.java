@@ -20,7 +20,7 @@ public class OperacaoService {
     private final OperacaoRepository operacaoRepository;
     private final EmailClient emailService;
 
-    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository) {
+    public OperacaoService(ContaRepository contaRepository, OperacaoRepository operacaoRepository, EmailClient emailService) {
         this.contaRepository = contaRepository;
         this.operacaoRepository = operacaoRepository;
         this.emailService = emailService;
