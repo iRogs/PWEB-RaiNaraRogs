@@ -1,8 +1,23 @@
+// import React from 'react';
+// import PaginaLogin from './components/PaginaLogin';
+
+// function App() {
+//   return <PaginaLogin />;
+// }
+
+// export default App;
+
+
 import React from 'react';
-import LoginPage from './components/LoginPage';
+import { AuthProvider } from './contexts/AuthContext';
+import { AppRoutes } from './routes';
 
 function App() {
-  return <LoginPage />;
+  return (
+    <AuthProvider>
+      <AppRoutes /> {/* Apenas o roteador deve estar aqui */}
+    </AuthProvider>
+  );
 }
 
 export default App;
