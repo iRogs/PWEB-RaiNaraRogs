@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ifba.edu.br.bank_api.dtos.LoginDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioForm;
-import ifba.edu.br.bank_api.dtos.TokenDTO;
+import ifba.edu.br.bank_api.dtos.LoginResponseDTO; 
 import ifba.edu.br.bank_api.entities.Usuario;
 import ifba.edu.br.bank_api.services.JWTokenService;
 import ifba.edu.br.bank_api.services.UsuarioService;
@@ -25,7 +25,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;
     private final JWTokenService tokenService;
-     
+    
     public UsuarioController (UsuarioService usuarioService, AuthenticationManager authenticationManager, JWTokenService tokenService){
         this.usuarioService = usuarioService;
         this.authenticationManager = authenticationManager;
@@ -34,19 +34,19 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody UsuarioForm form, UriComponentsBuilder uriBuilder) {
-        System.out.println("DTO Recebido: " + form.toString());
         UsuarioDTO novoUsuario = usuarioService.cadastrar(form);
         URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(novoUsuario.id()).toUri();
         return ResponseEntity.created(uri).body(novoUsuario);
-        
     }
 
+    
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO dto){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO dto){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
         var authentication = authenticationManager.authenticate(authenticationToken);
-        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
-        return ResponseEntity.ok(new TokenDTO(tokenJWT));
+        var usuarioAutenticado = (Usuario) authentication.getPrincipal();
+        var tokenJWT = tokenService.gerarToken(usuarioAutenticado);
+        var usuarioDTO = new UsuarioDTO(usuarioAutenticado);
+        return ResponseEntity.ok(new LoginResponseDTO(tokenJWT, usuarioDTO));
     }
-
 }
