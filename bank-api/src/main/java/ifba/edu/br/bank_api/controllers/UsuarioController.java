@@ -1,8 +1,6 @@
 package ifba.edu.br.bank_api.controllers;
 
 import java.net.URI;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ch.qos.logback.core.subst.Token;
-import feign.Response;
 import ifba.edu.br.bank_api.dtos.LoginDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioForm;
