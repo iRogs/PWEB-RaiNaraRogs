@@ -40,7 +40,6 @@ public class UsuarioController {
         return ResponseEntity.created(uri).body(novoUsuario);
     }
 
-    
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO dto){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
@@ -50,4 +49,5 @@ public class UsuarioController {
         var usuarioDTO = new UsuarioDTO(usuarioAutenticado);
         return ResponseEntity.ok(new LoginResponseDTO(tokenJWT, usuarioDTO));
     }
+
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import "../static/css/PaginaLoginRegistro.css";
 import characterImg from "../assets/img/character-2.png";
+import FormularioRegistro from "../components/FormularioRegistro";
 
 export default function PaginaRegistro() {
   return (
@@ -20,16 +21,9 @@ export default function PaginaRegistro() {
         {/* Lado direito - formulário */}
         <div className="login-right">
           <h2>Cadastre-se</h2>
-          <form className="login-form">
-            <input type="text" placeholder="CPF" />
-            <input type="text" placeholder="Nome" />
-            <input type="text" placeholder="E-mail" />
-            <div className="password-wrapper">
-              <input type="password" placeholder="Senha" />
-            </div>
-            <button type="submit">Registro</button>
-          </form>
+          <FormularioRegistro />
         </div>
+
       </div>
     </div>
   );
