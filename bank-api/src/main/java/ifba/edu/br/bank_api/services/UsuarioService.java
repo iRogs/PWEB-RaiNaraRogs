@@ -3,6 +3,7 @@ package ifba.edu.br.bank_api.services;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ifba.edu.br.bank_api.Client.EmailDTO;
+import ifba.edu.br.bank_api.Client.CpfClient;
 import ifba.edu.br.bank_api.Client.EmailClient;
 import ifba.edu.br.bank_api.dtos.UsuarioDTO;
 import ifba.edu.br.bank_api.dtos.UsuarioForm;
@@ -25,22 +27,33 @@ public class UsuarioService implements UserDetailsService{
     private final ContaRepository contaRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailClient emailService;
+    private final CpfClient validador;
 
     public UsuarioService(
         UsuarioRepository usuarioRepository,
         ContaRepository contaRepository,
         PasswordEncoder passwordEncoder,
-        EmailClient emailService) {
+        EmailClient emailService,
+        CpfClient validador) {
 
         this.usuarioRepository = usuarioRepository;
         this.contaRepository = contaRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.validador = validador;
     }
 
     @Transactional
     public UsuarioDTO cadastrar(UsuarioForm form){
         String senhaHash = passwordEncoder.encode(form.senha());
+         try {
+            ResponseEntity<String> response = validador.validar(form.cpf());
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new IllegalArgumentException("CPF inválido");
+            }
+        } catch (Exception e) {
+            throw new IllegalStateException("Erro no serviço de validação ou Cpf inválido", e);
+        }
         Conta conta = new Conta();
         conta.setAgencia("0001");
         conta.setSaldo(BigDecimal.ZERO);
@@ -61,7 +74,7 @@ public class UsuarioService implements UserDetailsService{
             "Bem-vindo ao nosso banco!",
             "Olá " + usuario.getNome() + ",\n\n" +
             "Sua conta foi criada com sucesso!\n" +
-            "Número da conta: " + usuario.getConta() + "\n" +
+            "Número da conta: " + usuario.getConta().getId() + "\n" +
             "Agência: " + usuario.getConta().getAgencia() + "\n\n" +
             "Obrigado por se cadastrar."
         );

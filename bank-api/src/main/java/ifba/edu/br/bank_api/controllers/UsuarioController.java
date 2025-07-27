@@ -17,6 +17,7 @@ import ifba.edu.br.bank_api.dtos.TokenDTO;
 import ifba.edu.br.bank_api.entities.Usuario;
 import ifba.edu.br.bank_api.services.JWTokenService;
 import ifba.edu.br.bank_api.services.UsuarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -33,7 +34,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody UsuarioForm form, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid UsuarioForm form, UriComponentsBuilder uriBuilder) {
         System.out.println("DTO Recebido: " + form.toString());
         UsuarioDTO novoUsuario = usuarioService.cadastrar(form);
         URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(novoUsuario.id()).toUri();
@@ -42,7 +43,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO dto){
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid LoginDTO dto){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
         var authentication = authenticationManager.authenticate(authenticationToken);
         var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
