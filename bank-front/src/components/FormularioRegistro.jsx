@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from 'axios'; // Importe o axios
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function FormularioRegistro() {
@@ -10,63 +10,89 @@ export default function FormularioRegistro() {
 
     const navigate = useNavigate();
 
+    function formatarCPF(valor) {
+        return valor
+            .replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+            .slice(0, 14);
+    }
+
     async function handleRegistro(event) {
         event.preventDefault();
 
+        if (!cpf || !nome || !email || !senha) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
         const usuarioParaCadastrar = {
-            cpf: cpf,
-            nome: nome,
-            email: email,
-            senha: senha
+            id: null,
+            cpf,
+            nome,
+            email,
+            senha
         };
 
         try {
-            const response = await axios.post('http://10.0.0.106:8082/banking-api/usuarios/cadastrar', usuarioParaCadastrar);
-            alert(`Usuário ${response.data.nome} cadastrado com sucesso! Redirecionando para a página de login.`);
+            const response = await axios.post(
+                'http://192.168.18.3:8082/banking-api/usuarios/cadastrar',
+                usuarioParaCadastrar,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            alert(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+            setCpf('');
+            setNome('');
+            setEmail('');
+            setSenha('');
             navigate('/login');
-
-            // setCpf('');
-            // setNome('');
-            // setEmail('');
-            // setSenha('');
-
         } catch (error) {
             console.error("Erro ao cadastrar usuário:", error);
-            alert("Não foi possível cadastrar o usuário. Verifique os dados e tente novamente.");
+            if (error.response) {
+                alert(`Erro ${error.response.status}: ${error.response.data.message || 'Erro ao cadastrar.'}`);
+            } else {
+                alert("Erro de rede ou servidor.");
+            }
         }
     }
-    
-  return (
-    <form className="login-form" onSubmit={handleRegistro}>
-        {}
-        <input 
-            type="text" 
-            placeholder="CPF" 
-            value={cpf} 
-            onChange={(e) => setCpf(e.target.value)} 
-        />
-        <input 
-            type="text" 
-            placeholder="Nome" 
-            value={nome} 
-            onChange={(e) => setNome(e.target.value)} 
-        />
-        <input 
-            type="text" 
-            placeholder="E-mail" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-        />
-        <div className="password-wrapper">
-            <input 
-                type="password" 
-                placeholder="Senha" 
-                value={senha} 
-                onChange={(e) => setSenha(e.target.value)} 
+
+    return (
+        <form className="login-form" onSubmit={handleRegistro}>
+            <input
+                type="text"
+                placeholder="CPF"
+                value={cpf}
+                onChange={(e) => setCpf(formatarCPF(e.target.value))}
+                maxLength={14}
             />
-        </div>
-        <button type="submit">Registro</button>
-    </form>
-  );
+            <input
+                type="text"
+                placeholder="Nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="E-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className="password-wrapper">
+                <input
+                    type="password"
+                    placeholder="Senha"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                />
+            </div>
+            <button type="submit">Registro</button>
+        </form>
+    );
 
 }
