@@ -17,6 +17,7 @@ import ifba.edu.br.bank_api.dtos.LoginResponseDTO;
 import ifba.edu.br.bank_api.entities.Usuario;
 import ifba.edu.br.bank_api.services.JWTokenService;
 import ifba.edu.br.bank_api.services.UsuarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
