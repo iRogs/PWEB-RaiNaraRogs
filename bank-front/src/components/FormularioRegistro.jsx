@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import loadingGif from "../assets/img/loading.gif";
 
 export default function FormularioRegistro() {
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -27,11 +29,12 @@ export default function FormularioRegistro() {
             return;
         }
 
+        setLoading(true);
+
         const usuarioParaCadastrar = {
-            id: null,
-            cpf,
             nome,
             email,
+            cpf,
             senha
         };
 
@@ -46,7 +49,6 @@ export default function FormularioRegistro() {
                 }
             );
 
-            alert(`Usuário ${response.data.nome} cadastrado com sucesso!`);
             setCpf('');
             setNome('');
             setEmail('');
@@ -59,7 +61,21 @@ export default function FormularioRegistro() {
             } else {
                 alert("Erro de rede ou servidor.");
             }
+        } finally {
+            setLoading(false);
         }
+    }
+
+    if (loading) {
+
+        return (
+            <div id="loading-overlay">
+                <div className="loader-container">
+                    <img src={loadingGif} alt="Carregando..." />
+                </div>
+            </div>
+        );
+
     }
 
     return (
@@ -94,5 +110,5 @@ export default function FormularioRegistro() {
             <button type="submit">Registro</button>
         </form>
     );
-
+    
 }
