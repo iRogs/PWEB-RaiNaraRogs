@@ -1,8 +1,8 @@
 import React from "react";
-import "../static/css/LoginPage.css";
+import "../static/css/PaginaLoginRegistro.css";
 import characterImg from "../assets/img/character.png";
 
-export default function LoginPage() {
+export default function PaginaLogin() {
   return (
     <div className="login-container">
       <div className="login-content">
@@ -12,7 +12,7 @@ export default function LoginPage() {
           <h2>Internet Banking Plataforma</h2>
           <p>
             Se ainda não tiver uma conta <br />
-            Você pode se <a href="#">registrar aqui !</a>
+            Você pode se <a href="/cadastrar">registrar aqui !</a>
           </p>
           <img src={characterImg} alt="Character" className="character-image" />
         </div>
@@ -21,19 +21,11 @@ export default function LoginPage() {
         <div className="login-right">
           <h2>Login</h2>
           <form className="login-form">
-            <input type="text" placeholder="Id da Conta" />
+            <input type="text" placeholder="E-mail" />
             <div className="password-wrapper">
               <input type="password" placeholder="Senha" />
-              <span className="icon">🔒</span>
-            </div>
-            <div className="forgot-password">
-              <a href="#">Esqueceu a senha?</a>
             </div>
             <button type="submit">Login</button>
-            <div className="checkbox-group">
-              <input type="checkbox" id="virtual-keyboard" />
-              <label htmlFor="virtual-keyboard">Ativar meu teclado virtual</label>
-            </div>
           </form>
         </div>
       </div>
