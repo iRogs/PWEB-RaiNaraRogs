@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
     const storagedUser = localStorage.getItem('@InternetBanking:user');
 
     if (storagedToken && storagedUser) {
-      api.defaults.headers.common['Authorization'] = Bearer ${storagedToken};
+      api.defaults.headers.common['Authorization'] = `Bearer ${storagedToken}`;
       setUser(JSON.parse(storagedUser));
     }
   }, []);
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('@InternetBanking:token', token);
       localStorage.setItem('@InternetBanking:user', JSON.stringify(usuario));
       
-      api.defaults.headers.common['Authorization'] = Bearer ${token};
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(usuario);
     } catch (error) {
       console.error("Falha no login:", error);
