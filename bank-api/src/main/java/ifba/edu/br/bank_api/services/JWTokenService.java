@@ -25,7 +25,7 @@ public class JWTokenService {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("Bank-API")
-                    .withSubject(usuario.getNome())
+                    .withSubject(usuario.getEmail())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch(JWTCreationException exception){
