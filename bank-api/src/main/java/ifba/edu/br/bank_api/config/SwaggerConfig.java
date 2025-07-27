@@ -16,7 +16,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Banking API")
+                        .title("Internet Banking API")
                         .version("1.0")
                         .description("API feita por Iainara Araújo, Raí Salomão e Rodrigo Frempong"))
                         .components(new Components()

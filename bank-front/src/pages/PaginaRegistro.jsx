@@ -20,7 +20,7 @@ export default function PaginaRegistro() {
 
         {/* Lado direito - formulário */}
         <div className="login-right">
-          <h2>Login</h2>
+          <h2>Cadastre-se</h2>
           <FormularioRegistro />
         </div>
 
