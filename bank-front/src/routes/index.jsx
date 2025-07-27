@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import PaginaLogin from '../pages/PaginaLogin';
 import PaginaRegistro from '../pages/PaginaRegistro';
-import PaginaInicial from '../pages/PaginaInicial';
+import PaginaInicial, { Painel } from '../pages/PaginaInicial';
 
 export function AppRoutes() {
     
