@@ -70,21 +70,27 @@ public class OperacaoService {
         return "Saque realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
-    public String pagar(Long accountId, BigDecimal amount, String descricao) {
+    public String pagar(Long accountFrom, Long accountTo, BigDecimal amount, String descricao) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
         }
 
-        Conta conta = findAccount(accountId);
+        Conta contaFrom = findAccount(accountFrom);
+        Conta contaTo = findAccount(accountTo);
 
-        if (conta.getSaldo().compareTo(amount) < 0) {
+        if (contaFrom.getSaldo().compareTo(amount) < 0) {
             throw new IllegalArgumentException("Saldo insuficiente para pagamento.");
         }
+        
+        salvarOperacao(contaFrom, TipoOperacao.PAGAMENTO, amount, descricao);
+        salvarOperacao(contaTo, TipoOperacao.DEPOSITO, amount, descricao);
+        contaFrom.setSaldo(contaFrom.getSaldo().subtract(amount));
+        contaTo.setSaldo(contaTo.getSaldo().add(amount));
+        contaRepository.save(contaFrom);
+        enviarEmail(contaFrom, "Pagamento: " + descricao, amount);
+        enviarEmail(contaTo, "Pagamento recebido: " + descricao, amount);
 
-        salvarOperacao(conta, TipoOperacao.PAGAMENTO, amount, descricao);;
-        enviarEmail(conta, "Pagamento: " + descricao, amount);
-
-        return "Pagamento realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
+        return "Pagamento realizado com sucesso. Novo saldo: R$ " + contaFrom.getSaldo();
     }
 
     public List<Operacao> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim) {

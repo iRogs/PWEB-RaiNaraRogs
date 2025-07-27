@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
+import ifba.edu.br.bank_api.dtos.PagamentoDTO;
 import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.services.OperacaoService;
@@ -44,8 +45,8 @@ public class OperacaoController {
     }
 
     @PostMapping("/pagar")
-    public ResponseEntity<String> pagar(@RequestBody @Valid OperacaoDTO dto, UriComponentsBuilder uriBuilder) {
-        String mensagem = operacaoService.pagar(dto.getContaId(), dto.getValor(), dto.getDescricao());
+    public ResponseEntity<String> pagar(@RequestBody @Valid PagamentoDTO dto, UriComponentsBuilder uriBuilder) {
+        String mensagem = operacaoService.pagar(dto.idContaFrom(), dto.idContaTo(), dto.valor(), dto.descricao());
         URI uri = uriBuilder.path("/operacoes/pagar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
     }
