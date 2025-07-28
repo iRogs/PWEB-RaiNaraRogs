@@ -5,7 +5,9 @@ import '../static/css/PaginaInicial.css';
 export default function PaginaInicial() {
   const { user, signOut } = useContext(AuthContext);
 
-  
+  if (!user) {
+    return <div>A carregar informações do utilizador...</div>;
+  }
   const conta = {
     numero: 'XXXX-XXXX-9868',
     agencia: '0001',
