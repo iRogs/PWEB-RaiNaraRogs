@@ -1,47 +1,49 @@
-import React, { createContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import axios from 'axios';
+import { createContext, useState } from 'react';
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const storagedToken = localStorage.getItem('@InternetBanking:token');
-    const storagedUser = localStorage.getItem('@InternetBanking:user');
-
-    if (storagedToken && storagedUser) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${storagedToken}`;
-      setUser(JSON.parse(storagedUser));
-    }
-  }, []);
+  const [signed, setSigned] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [usuario, setUsuario] = useState(null);
 
   async function signIn(email, senha) {
     try {
-      
-      const response = await api.post('/bank-api/usuarios/login', { email, senha });
-      const { token, usuario } = response.data; 
+      setLoading(true);
+      const response = await axios.post('http://192.168.18.3:8082/banking-api/usuarios/login', {
+        email,
+        senha,
+      });
 
-      localStorage.setItem('@InternetBanking:token', token);
-      localStorage.setItem('@InternetBanking:user', JSON.stringify(usuario));
-      
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser(usuario);
-    } catch (error) {
-      console.error("Falha no login:", error);
-      alert("Email ou senha inválidos.");
+      console.log('Login realizado:', response.data);
+      setUsuario(response.data.usuario);
+      setSigned(true);
+    } catch (err) {
+      console.error('Erro no login:', err);
+      throw err;
+    } finally {
+      setLoading(false);
     }
   }
 
   function signOut() {
-    localStorage.clear();
-    setUser(null);
+    setUsuario(null);
+    setSigned(false);
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{
+        signed,
+        loading,
+        signIn,
+        signOut,
+        usuario,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  );
-
+  );
 }
