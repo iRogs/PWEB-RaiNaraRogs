@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import loadingGif from "../assets/img/loading.gif";
 
 export default function FormularioRegistro() {
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const [mensagemToast, setMensagemToast] = useState(null);
+    const [toastVisivel, setToastVisivel] = useState(false);
 
     const navigate = useNavigate();
 
@@ -19,80 +24,114 @@ export default function FormularioRegistro() {
             .slice(0, 14);
     }
 
+    useEffect(() => {
+        if (mensagemToast) {
+            setToastVisivel(true);
+            const timer = setTimeout(() => {
+                setToastVisivel(false);
+                setMensagemToast(null);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [mensagemToast]);
+
     async function handleRegistro(event) {
         event.preventDefault();
+        setMensagemToast(null);
 
         if (!cpf || !nome || !email || !senha) {
-            alert("Por favor, preencha todos os campos.");
+            setMensagemToast({ texto: "Por favor, preencha todos os campos.", tipo: "error" });
             return;
         }
 
-        const usuarioParaCadastrar = {
-            id: null,
-            cpf,
-            nome,
-            email,
-            senha
-        };
+        setLoading(true);
+
+        const usuarioParaCadastrar = { nome, email, cpf, senha };
 
         try {
-            const response = await axios.post(
+            await axios.post(
                 'http://192.168.18.3:8082/banking-api/usuarios/cadastrar',
                 usuarioParaCadastrar,
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
+                { headers: { 'Content-Type': 'application/json' } }
             );
 
-            alert(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+            setMensagemToast({ texto: 'Parabéns! Estamos te levando para página de login...', tipo: 'success' });
+
             setCpf('');
             setNome('');
             setEmail('');
             setSenha('');
-            navigate('/login');
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 7000);
+
         } catch (error) {
             console.error("Erro ao cadastrar usuário:", error);
             if (error.response) {
-                alert(`Erro ${error.response.status}: ${error.response.data.message || 'Erro ao cadastrar.'}`);
+                setMensagemToast({
+                    texto: `Erro ${error.response.status}: ${error.response.data.message || 'Erro ao cadastrar.'}`,
+                    tipo: 'error'
+                });
             } else {
-                alert("Erro de rede ou servidor.");
+                setMensagemToast({ texto: "Erro de rede ou servidor.", tipo: 'error' });
             }
+        } finally {
+            setLoading(false);
         }
     }
 
     return (
-        <form className="login-form" onSubmit={handleRegistro}>
-            <input
-                type="text"
-                placeholder="CPF"
-                value={cpf}
-                onChange={(e) => setCpf(formatarCPF(e.target.value))}
-                maxLength={14}
-            />
-            <input
-                type="text"
-                placeholder="Nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-            />
-            <input
-                type="text"
-                placeholder="E-mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <div className="password-wrapper">
+        <>
+            {loading && (
+                <div id="loading-overlay">
+                    <div className="loader-container">
+                        <img src={loadingGif} alt="Carregando..." />
+                    </div>
+                </div>
+            )}
+
+            {/* Toast fixo no canto da tela */}
+            {mensagemToast && (
+                <div
+                    className={`toast ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
+                    role="alert"
+                >
+                    {mensagemToast.texto}
+                </div>
+            )}
+
+            <form className="login-form" onSubmit={handleRegistro} style={{ opacity: loading ? 0.5 : 1 }}>
                 <input
-                    type="password"
-                    placeholder="Senha"
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
+                    type="text"
+                    placeholder="CPF"
+                    value={cpf}
+                    onChange={(e) => setCpf(formatarCPF(e.target.value))}
+                    maxLength={14}
                 />
-            </div>
-            <button type="submit">Registro</button>
-        </form>
+                <input
+                    type="text"
+                    placeholder="Nome"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="E-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <div className="password-wrapper">
+                    <input
+                        type="password"
+                        placeholder="Senha"
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                    />
+                </div>
+                <button type="submit" disabled={loading}>Registro</button>
+            </form>
+        </>
     );
 
 }
