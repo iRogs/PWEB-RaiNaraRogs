@@ -8,9 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record PagamentoDTO(
     @NotNull
-    Long idContaFrom, 
-
-    @NotNull
     Long idContaTo, 
 
     @NotNull

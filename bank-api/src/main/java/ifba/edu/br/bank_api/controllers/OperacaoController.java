@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,8 @@ import ifba.edu.br.bank_api.dtos.OperacaoDTO;
 import ifba.edu.br.bank_api.dtos.PagamentoDTO;
 import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
+import ifba.edu.br.bank_api.entities.Usuario;
+import ifba.edu.br.bank_api.services.JWTokenService;
 import ifba.edu.br.bank_api.services.OperacaoService;
 import jakarta.validation.Valid;
 
@@ -26,27 +30,36 @@ public class OperacaoController {
 
     private final OperacaoService operacaoService;
 
-    public OperacaoController(OperacaoService operacaoService) {
+    public OperacaoController(OperacaoService operacaoService, JWTokenService tokenService) {
         this.operacaoService = operacaoService;
     }
 
+    private Usuario getUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (Usuario) authentication.getPrincipal();
+    }
+
+
     @PostMapping("/depositar")
     public ResponseEntity<String> depositar(@RequestBody @Valid OperacaoDTO dto, UriComponentsBuilder uriBuilder) {
-        String mensagem = operacaoService.depositar(dto.getContaId(), dto.getValor());
+        Usuario usuario = getUsuarioLogado();
+        String mensagem = operacaoService.depositar(usuario.getConta().getId(), dto.valor());
         URI uri = uriBuilder.path("/operacoes/depositar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
     }
 
     @PostMapping("/sacar")
     public ResponseEntity<String> sacar(@RequestBody @Valid OperacaoDTO dto, UriComponentsBuilder uriBuilder) {
-        String mensagem = operacaoService.sacar(dto.getContaId(), dto.getValor());
+        Usuario usuario = getUsuarioLogado();
+        String mensagem = operacaoService.sacar(usuario.getConta().getId(), dto.valor());
         URI uri = uriBuilder.path("/operacoes/sacar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
     }
 
     @PostMapping("/pagar")
     public ResponseEntity<String> pagar(@RequestBody @Valid PagamentoDTO dto, UriComponentsBuilder uriBuilder) {
-        String mensagem = operacaoService.pagar(dto.idContaFrom(), dto.idContaTo(), dto.valor(), dto.descricao());
+        Usuario usuario = getUsuarioLogado();
+        String mensagem = operacaoService.pagar(usuario.getConta().getId(), dto.idContaTo(), dto.valor(), dto.descricao());
         URI uri = uriBuilder.path("/operacoes/pagar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
     }

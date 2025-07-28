@@ -10,7 +10,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import ifba.edu.br.bank_api.repositories.UsuarioRepository;
 import ifba.edu.br.bank_api.services.JWTokenService;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
