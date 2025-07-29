@@ -50,7 +50,6 @@ function PrivateRoute({ children }) {
 
 export function AppRoutes() {
   return (
-    <BrowserRouter>
       <Routes>
         {/* Rotas Públicas */}
         <Route path="/" element={<PaginaLogin />} />
@@ -67,6 +66,5 @@ export function AppRoutes() {
           } 
         />
       </Routes>
-    </BrowserRouter>
   );
 }

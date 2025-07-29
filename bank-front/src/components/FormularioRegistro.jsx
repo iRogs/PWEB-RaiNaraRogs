@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import loadingGif from "../assets/img/loading.gif";
 
@@ -49,8 +49,8 @@ export default function FormularioRegistro() {
         const usuarioParaCadastrar = { nome, email, cpf, senha };
 
         try {
-            await axios.post(
-                'http://192.168.18.3:8082/banking-api/usuarios/cadastrar',
+            await api.post(
+                '/banking-api/usuarios/cadastrar',
                 usuarioParaCadastrar,
                 { headers: { 'Content-Type': 'application/json' } }
             );

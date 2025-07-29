@@ -36,6 +36,12 @@ public class OperacaoService {
         operacaoRepository.save(operacao);
     }
 
+    public BigDecimal consultarSaldo(Long id) {
+        Conta conta = findAccount(id);
+        return conta.getSaldo();
+    }
+
+
     public String depositar(Long accountId, BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor do depósito deve ser maior que zero.");
