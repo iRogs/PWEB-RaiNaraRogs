@@ -50,7 +50,7 @@ export default function FormularioRegistro() {
 
         try {
             await axios.post(
-                'http://192.168.18.3:8082/banking-api/usuarios/cadastrar',
+                'http://192.168.100.31:8082/banking-api/usuarios/cadastrar',
                 usuarioParaCadastrar,
                 { headers: { 'Content-Type': 'application/json' } }
             );

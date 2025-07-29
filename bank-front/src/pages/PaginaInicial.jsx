@@ -2,6 +2,10 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import '../static/css/PaginaInicial.css';
+import pagarIcon from '../assets/img/pagar.png';
+import depositarIcon from '../assets/img/depositar.png';
+import sacarIcon from '../assets/img/sacar.png';
+import cofreIcon from '../assets/img/cofrinho.png';
 
 export default function PaginaInicial() {
   const { usuario, signOut } = useContext(AuthContext);
@@ -14,7 +18,7 @@ export default function PaginaInicial() {
   const conta = {
     numero: 'XXXX-XXXX-9868',
     agencia: '0001',
-    saldo: usuario.saldoReal ?? 0,  // usa saldo real do usuÃ¡rio se existir
+    saldo: usuario.saldoReal ?? 0,  
   };
 
   const movimentacoes = [
@@ -79,15 +83,46 @@ export default function PaginaInicial() {
           </div>
         </section>
 
-        <section className="quick-operations">
-          <h4>OperaÃ§Ãµes RÃ¡pidas</h4>
-          <div className="operations-grid">
-            <button className="operation-btn">Pagar</button>
-            <button className="operation-btn">Depositar</button>
-            <button className="operation-btn">Sacar</button>
-            <button className="operation-btn">Cofre</button>
-          </div>
-        </section>
+  {/* 4. Operações Rápidas */}
+<section className="quick-operations">
+  <h4>Operações Rápidas</h4>
+  <div className="operations-grid">
+    
+    {/* Botão Pagar */}
+    <div className="operation-card">
+      <div className="icon-container">
+        {/* Substitua pelo caminho da sua imagem */}
+        <img src={pagarIcon} alt="Pagar" />
+      </div>
+      <span>Pagar</span>
+    </div>
+
+    {/* Botão Depositar */}
+    <div className="operation-card">
+      <div className="icon-container">
+        <img src={depositarIcon} alt="Depositar" />
+      </div>
+      <span>Depositar</span>
+    </div>
+
+    {/* Botão Sacar */}
+    <div className="operation-card">
+      <div className="icon-container">
+        <img src={sacarIcon}  alt="Sacar" />
+      </div>
+      <span>Sacar</span>
+    </div>
+    
+    {/* Botão Cofre */}
+    <div className="operation-card">
+      <div className="icon-container">
+        <img src={cofreIcon} alt="Cofre" />
+      </div>
+      <span>Cofre</span>
+    </div>
+
+  </div>
+</section>
 
         <section className="latest-transactions">
           <h4>Ãšltimas movimentaÃ§Ãµes</h4>

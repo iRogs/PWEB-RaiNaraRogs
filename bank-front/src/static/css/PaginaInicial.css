@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700&display=swap');
+
 body {
     font-family: 'Inter', sans-serif !important;
 }
@@ -10,11 +12,11 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-/* --- Barra Lateral --- */
+
 .sidebar {
   width: 250px;
-  background-color: #ffffff; /* Cor escura da imagem */
-  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.08); /* sombra para a direita */
+  background-color: #ffffff;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.08);
   color: #a0aec0;
   display: flex;
   flex-direction: column;
@@ -23,7 +25,7 @@ body {
 
 .sidebar-header h2 {
   color: #4a5568;
-  /* font-size: 1.5rem; */
+ 
   margin-bottom: 2.5rem;
 }
 
@@ -71,7 +73,7 @@ body {
   color: #ffffff;
 }
 
-/* --- ConteÃºdo Principal --- */
+
 .main-content {
   flex-grow: 1;
   padding: 2rem 3rem;
@@ -120,7 +122,7 @@ body {
   color: #718096;
 }
 
-/* --- CartÃ£o da Conta --- */
+
 .account-card {
   background: linear-gradient(100deg, #f9a825, #f57f17);
   color: white;
@@ -162,36 +164,79 @@ body {
   font-weight: 700;
 }
 
-/* --- OperaÃ§Ãµes RÃ¡pidas --- */
+
+
 .quick-operations {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
 }
 
 .quick-operations h4 {
-  color: #4a5568;
-  margin-bottom: 2rem;
-  font-size: 1.25rem;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
+  text-align: left;
 }
 
 .operations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  /* Cria 4 colunas em ecrãs grandes, e adapta-se para 2 em ecrãs menores */
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.5rem;
 }
 
-.operation-btn {
-  background-color: #ffffff;
-  color: #4a5568;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 1.5rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
+/* O cartão laranja que envolve o ícone e o texto */
+.operation-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinha os itens à esquerda */
+  gap: 90px; /* Espaço entre o ícone e o texto */
+  
+  height: 87px;
+  padding-left: 0px; /* Pequeno espaçamento para o ícone não colar na borda */
+  
+  background: #F9BA33; /* A cor laranja do Figma */
+  border-radius: 20px 43.5px 43.5px 20px; /* O arredondamento específico do Figma */
+  
+  color: #FFF;
+  font-family: "Plus Jakarta Sans", sans-serif; /* A fonte do Figma */
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  border-radius: 43.5px;
+  
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'Inter', sans-serif !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.operation-card:hover {
+  transform: translateY(-5px); /* Efeito de elevação ao passar o rato */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* O contentor branco e redondo do ícone */
+.icon-container {
+  width: 85px;
+  height: 85px;
+  flex-shrink: 0;
+  
+  background-color: #fff;
+  border-radius: 50%; /* Faz o círculo perfeito */
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: -2px;
+  /* Sombra interna do Figma */
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+/* A imagem do ícone dentro do círculo */
+.icon-container img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain; /* Garante que a imagem não fique distorcida */
 }
 
 .operation-btn:hover {
@@ -227,12 +272,12 @@ body {
   color: #313131;
 }
 
-/* Ãšltimo item sem borda */
+
 .movimentacao-item:last-child {
   border-bottom: none;
 }
 
-/* Colunas internas */
+
 .movimentacao-data {
   min-width: 100px;
   color: #909090;
@@ -241,7 +286,7 @@ body {
 .movimentacao-info {
   flex: 1;
   margin-left: 10px;
-  color: #909090; /* unificado com data */
+  color: #909090;
 }
 
 .movimentacao-valor {

@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   async function signIn(email, senha) {
     try {
       setLoading(true);
-      const response = await axios.post('http://192.168.18.3:8082/banking-api/usuarios/login', {
+      const response = await axios.post('http://192.168.100.31:8082/banking-api/usuarios/login', {
         email,
         senha,
       });
