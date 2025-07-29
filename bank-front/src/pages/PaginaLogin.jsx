@@ -9,12 +9,19 @@ export default function PaginaLogin() {
         document.title = 'Internet Banking Login';
     }, []);
 
+    useEffect(() => {
+      document.body.classList.add('zoom-110');
+      return () => {
+        document.body.classList.remove('zoom-110');
+      };
+    }, []);
+
     return (
       <div className="login-container">
         <div className="login-content">
 
           {/* Lado esquerdo */}
-          <div className="login-left">
+          <div className="login-left animate-slide-in">
             <h1>Faça seu login</h1>
             <h2>Internet Banking Plataforma</h2>
             <p>
@@ -25,8 +32,8 @@ export default function PaginaLogin() {
           </div>
 
           {/* Lado direito - formulário */}
-          <div className="login-right">
-            <h2>Login</h2>
+          <div className="login-right animate-slide-in">
+            <h2>Acesse sua conta</h2>
             <FormularioLogin />
             
           </div>

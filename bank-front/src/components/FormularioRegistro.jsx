@@ -95,7 +95,7 @@ export default function FormularioRegistro() {
             {/* Toast fixo no canto da tela */}
             {mensagemToast && (
                 <div
-                    className={`toast ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
+                    className={`toast no-zoom ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
                     role="alert"
                 >
                     {mensagemToast.texto}
@@ -125,7 +125,7 @@ export default function FormularioRegistro() {
                 <div className="password-wrapper">
                     <input
                         type="password"
-                        placeholder="Senha"
+                        placeholder="Digite uma senha"
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
                     />

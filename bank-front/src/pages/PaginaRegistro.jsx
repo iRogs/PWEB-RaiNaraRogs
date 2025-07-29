@@ -9,11 +9,18 @@ export default function PaginaRegistro() {
         document.title = 'Internet Banking Cadastro';
     }, []);
 
+    useEffect(() => {
+      document.body.classList.add('zoom-110');
+      return () => {
+        document.body.classList.remove('zoom-110');
+      };
+    }, []);    
+
     return (
       <div className="login-container">
         <div className="login-content">
           {/* Lado esquerdo */}
-          <div className="login-left">
+          <div className="login-left animate-slide-in">
             <h1>Faça seu cadastro</h1>
             <h2>Internet Banking Plataforma</h2>
             <p>
@@ -24,7 +31,7 @@ export default function PaginaRegistro() {
           </div>
 
           {/* Lado direito - formulário */}
-          <div className="login-right">
+          <div className="login-right animate-slide-in">
             <h2>Insira suas informações</h2>
             <FormularioRegistro />
           </div>

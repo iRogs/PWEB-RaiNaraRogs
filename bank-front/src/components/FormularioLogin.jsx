@@ -73,7 +73,7 @@ export default function FormularioLogin() {
             <div className="password-wrapper">
               <input
                   type="password"
-                  placeholder="Senha"
+                  placeholder="Digite sua senha"
                   value={senha}
                   onChange={e => setSenha(e.target.value)}
                   disabled={loadingLocal}
@@ -95,7 +95,7 @@ export default function FormularioLogin() {
           {/* Toast local para erros de validação e sucesso */}
           {mensagemToast && (
               <div
-                className={`toast ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
+                className={`toast no-zoom ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
                 role="alert"
               >
                 {mensagemToast.texto}
