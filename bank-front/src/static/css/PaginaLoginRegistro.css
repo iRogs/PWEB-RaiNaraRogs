@@ -94,7 +94,7 @@ body {
 }
 
 .character-image {
-  width: 220px;
+  width: 200px;
   margin-top: 0px;
 }
 
@@ -117,7 +117,7 @@ body {
 .login-form input[type="password"] {
   width: 100%;
   padding: 12px;
-  background-color: #ffe9df;
+  background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-bottom: 15px;

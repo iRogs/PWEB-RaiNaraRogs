@@ -1,71 +1,109 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
+import loadingGif from '../assets/img/loading.gif';
+
 export default function FormularioLogin() {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [mensagemToast, setMensagemToast] = useState(null);
 
-  const { signIn } = useContext(AuthContext);
-  const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [loadingLocal, setLoadingLocal] = useState(false);
+    const [showLoadingGif, setShowLoadingGif] = useState(false);
 
-  async function handleLogin(e) {
-    e.preventDefault();
-    setMensagemToast(null);
+    const [mensagemToast, setMensagemToast] = useState(null);
+    const [toastVisivel, setToastVisivel] = useState(false);
 
-    if (!email || !senha) {
-      setMensagemToast({ texto: 'Preencha e-mail e senha.', tipo: 'error' });
-      return;
+    const { signIn, mensagemToast: mensagemToastContext } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (mensagemToast) {
+            setToastVisivel(true);
+            const timer = setTimeout(() => {
+                setToastVisivel(false);
+                setMensagemToast(null);
+            }, 5000);
+          return () => clearTimeout(timer);
+        }
+    }, [mensagemToast]);
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        setMensagemToast(null);
+
+        if (!email || !senha) {
+            setMensagemToast({ texto: 'Preencha e-mail e senha.', tipo: 'error' });
+            return;
+        }
+
+        setLoadingLocal(true);
+
+        try {
+            await signIn(email, senha);
+
+            setMensagemToast({ texto: 'Login realizado com sucesso!', tipo: 'success' });
+            setShowLoadingGif(true);
+
+            setTimeout(() => {
+                setShowLoadingGif(false);
+                navigate('/home');
+            }, 2000);
+
+        } catch (error) {
+        } finally {
+              setLoadingLocal(false);
+          }
     }
 
-    setLoading(true);
+    return (
+        <>
+            <form
+                className="login-form"
+                onSubmit={handleLogin}
+                style={{ opacity: loadingLocal ? 0.5 : 1 }}
+          >
+            <input
+                type="text"
+                placeholder="E-mail"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                disabled={loadingLocal}
+            />
+            <div className="password-wrapper">
+              <input
+                  type="password"
+                  placeholder="Senha"
+                  value={senha}
+                  onChange={e => setSenha(e.target.value)}
+                  disabled={loadingLocal}
+              />
+            </div>
+            <button type="submit" disabled={loadingLocal}>Login</button>
 
-    try {
-      await signIn(email, senha);
+            {/* Gif de loading abaixo do botão */}
+            {showLoadingGif && (
+              <div
+                  className="loader-container"
+                  style={{ marginTop: '15px', textAlign: 'center' }}
+                  >
+                  <img src={loadingGif} alt="Carregando..." />
+              </div>
+            )}
+          </form>
 
-      setMensagemToast({ texto: 'Login realizado com sucesso!', tipo: 'success' });
+          {/* Toast local para erros de validação e sucesso */}
+          {mensagemToast && (
+              <div
+                className={`toast ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
+                role="alert"
+              >
+                {mensagemToast.texto}
+              </div>
+          )}
 
-      setTimeout(() => {
-        navigate('/home');
-      }, 1000); // tempo reduzido
-    } catch (error) {
-      setMensagemToast({
-        texto: 'Erro ao tentar logar. Verifique seu email e senha.',
-        tipo: 'error',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
+          {/* Toast global do contexto para erros do backend (já aparece fixo no canto) */}
+        </>
+    );
 
-  return (
-    <>
-      <form className="login-form" onSubmit={handleLogin} style={{ opacity: loading ? 0.5 : 1 }}>
-        <input
-          type="text"
-          placeholder="E-mail"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <div className="password-wrapper">
-          <input
-            type="password"
-            placeholder="Senha"
-            value={senha}
-            onChange={e => setSenha(e.target.value)}
-          />
-        </div>
-        <button type="submit" disabled={loading}>Login</button>
-      </form>
-
-      {mensagemToast && (
-        <div className={`toast ${mensagemToast.tipo}`}>
-          {mensagemToast.texto}
-        </div>
-      )}
-    </>
-  );
-  
 }

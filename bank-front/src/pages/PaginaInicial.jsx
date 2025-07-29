@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
+
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import '../static/css/PaginaInicial.css';
@@ -11,40 +12,78 @@ export default function PaginaInicial() {
     const { usuario, signOut } = useContext(AuthContext);
     const [saldo, setSaldo] = useState(0);
     const [loadingSaldo, setLoadingSaldo] = useState(true);
-    
+    const movimentacoesRef = useRef(null);
+
     useEffect(() => {
+        document.title = 'Internet Banking Home';
+    }, []);
+
+    useEffect(() => {
+        let isMounted = true;
+
         if (usuario) {
             async function fetchSaldo() {
                 try {
-                    const response = await api.get('/operacoes/saldo');
-                    setSaldo(response.data);
+                    const response = await api.get('/banking-api/operacoes/saldo');
+                    if (isMounted) setSaldo(response.data);
                 } catch (error) {
                     console.error("Erro ao buscar saldo:", error);
                 } finally {
-                    setLoadingSaldo(false);
+                    if (isMounted) setLoadingSaldo(false);
                 }
             }
             fetchSaldo();
         }
-    }, [usuario]); 
+
+        return () => {
+            isMounted = false;
+        };
+    }, [usuario]);
+
+    // Tentativa de buscar as movimentações (extrato) via API
+    // useEffect(() => {
+    //     let isMounted = true;
+
+    //     if (usuario) {
+    //         async function fetchMovimentacoes() {
+    //             try {
+    //                 const anoAtual = new Date().getFullYear();
+    //                 const inicio = `${anoAtual}-01-01T00:00:00`;
+    //                 const fim = `${anoAtual}-12-31T23:59:59`;
+
+    //                 const response = await api.get('/banking-api/operacoes/extrato', {
+    //                     params: {
+    //                         contaId: usuario.id,
+    //                         inicio,
+    //                         fim
+    //                     }
+    //                 });
+
+    //                 if (isMounted) setMovimentacoes(response.data);
+    //             } catch (error) {
+    //                 console.error("Erro ao buscar movimentações:", error);
+    //             } finally {
+    //                 if (isMounted) setLoadingMov(false);
+    //             }
+    //         }
+
+    //         fetchMovimentacoes();
+    //     }
+
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, [usuario]);
 
     if (!usuario) {
         return <div>Carregando...</div>;
     }
 
-<<<<<<< HEAD
-  const conta = {
-    numero: 'XXXX-XXXX-9868',
-    agencia: '0001',
-    saldo: usuario.saldoReal ?? 0,  
-  };
-=======
     const conta = {
         numero: usuario.id,
         agencia: '0001',
         saldo: saldo,
     };
->>>>>>> 12308bff5001998808f2cb70bfab0f9423e83aae
 
     const movimentacoes = [
         { data: '24 de Julho', tipo: 'Pagamento realizado', descricao: 'Seguro de Vida', valor: -12.22 },
@@ -52,139 +91,36 @@ export default function PaginaInicial() {
         { data: '19 de Julho', tipo: 'Pix recebido', descricao: 'Iainara Cerqueira dos Santos - PICPAY SERVIÇOES LTDA', valor: 24.52 },
         { data: '17 de Julho', tipo: 'Pix enviado', descricao: '*********', valor: -7.70 },
     ];
-    
+
     function handleSignOut() {
         signOut();
     }
 
-<<<<<<< HEAD
-  function handleSignOut() {
-    signOut();
-    navigate('/login');
-  }
+    function scrollParaMovimentacoes() {
+        movimentacoesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
 
-  return (
-    <div className="dashboard-container">
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <h2>Internet Banking</h2>
-        </div>
-        <nav className="sidebar-nav">
-          <ul>
-            <li className="active"><a>Painel</a></li>
-            <li><a>Transações</a></li>
-            <li><a>Carteira</a></li>
-            <li><a>Configurações</a></li>
-          </ul>
-        </nav>
-        <div className="sidebar-footer">
-          <a onClick={handleSignOut} style={{ cursor: 'pointer' }}>Sair</a>
-        </div>
-      </aside>
+    function formatValor(valor) {
+        const formatted = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        return valor > 0 ? `+${formatted}` : `–${formatted}`;
+    }
 
-      <main className="main-content">
-        <header className="main-header">
-          <div className="welcome-message">Olá {usuario.nome}!</div>
-          <div className="user-profile">
-            <div className="user-avatar"></div>
-            <div className="user-details">
-              <span>{usuario.nome}</span>
-              <small>Editar perfil</small>
-            </div>
-          </div>
-        </header>
-
-        <section className="account-overview">
-          <div className="account-card">
-            <div className="card-header">
-              <span>Conta</span>
-              <a href="#">Ver Extrato &gt;</a>
-            </div>
-            <div className="card-body">
-              <span className="account-number">@{conta.numero}</span>
-              <span className="agency">Agência {conta.agencia}</span>
-            </div>
-            <div className="card-footer">
-              <span>Saldo em conta</span>
-              <span className="balance">
-                {conta.saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-              </span>
-            </div>
-          </div>
-        </section>
-
-  {/* 4. Opera��es R�pidas */}
-<section className="quick-operations">
-  <h4>Opera��es R�pidas</h4>
-  <div className="operations-grid">
-    
-    {/* Bot�o Pagar */}
-    <div className="operation-card">
-      <div className="icon-container">
-        {/* Substitua pelo caminho da sua imagem */}
-        <img src={pagarIcon} alt="Pagar" />
-      </div>
-      <span>Pagar</span>
-    </div>
-
-    {/* Bot�o Depositar */}
-    <div className="operation-card">
-      <div className="icon-container">
-        <img src={depositarIcon} alt="Depositar" />
-      </div>
-      <span>Depositar</span>
-    </div>
-
-    {/* Bot�o Sacar */}
-    <div className="operation-card">
-      <div className="icon-container">
-        <img src={sacarIcon}  alt="Sacar" />
-      </div>
-      <span>Sacar</span>
-    </div>
-    
-    {/* Bot�o Cofre */}
-    <div className="operation-card">
-      <div className="icon-container">
-        <img src={cofreIcon} alt="Cofre" />
-      </div>
-      <span>Cofre</span>
-    </div>
-
-  </div>
-</section>
-
-        <section className="latest-transactions">
-          <h4>Últimas movimentações</h4>
-          {movimentacoes.map((mov, index) => (
-            <div key={index} className="movimentacao-item">
-              <div className="movimentacao-data">{mov.data}</div>
-              <div className="movimentacao-info">
-                {mov.tipo}
-                <p>{mov.descricao}</p>
-              </div>
-                <div className={`movimentacao-valor ${mov.valor > 0 ? 'positivo' : 'negativo'}`}>
-                  {mov.valor > 0
-                    ? `+${mov.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
-                    : `–${Math.abs(mov.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
-=======
     return (
         <div className="dashboard-container">
             <aside className="sidebar">
                 <div className="sidebar-header">
                     <h2>Internet Banking</h2>
->>>>>>> 12308bff5001998808f2cb70bfab0f9423e83aae
                 </div>
                 <nav className="sidebar-nav">
                     <ul>
-                        <li className="active"><a>Painel</a></li>
-                        <li><a>Transações</a></li>
-                        <li><a>Carteira</a></li>
-                        <li><a>Configurações</a></li>
+                        <li className="active"><a href="#painel" onClick={e => e.preventDefault()}>Painel</a></li>
+                        <li><a href="#transacoes" onClick={e => e.preventDefault()}>Transações</a></li>
+                        <li><a href="#carteira" onClick={e => e.preventDefault()}>Carteira</a></li>
+                        <li><a href="#configuracoes" onClick={e => e.preventDefault()}>Configurações</a></li>
                     </ul>
                 </nav>
                 <div className="sidebar-footer">
-                    <a onClick={handleSignOut} style={{ cursor: 'pointer' }}>Sair</a>
+                  <a onClick={handleSignOut} style={{ cursor: 'pointer' }}>Sair</a>
                 </div>
             </aside>
 
@@ -204,7 +140,7 @@ export default function PaginaInicial() {
                     <div className="account-card">
                         <div className="card-header">
                             <span>Conta</span>
-                            <a href="#">Ver Extrato &gt;</a>
+                            <a href="#movimentacoes" onClick={(e) => { e.preventDefault(); scrollParaMovimentacoes(); }}>Ver Extrato</a>
                         </div>
                         <div className="card-body">
                             <span className="account-number">@{conta.numero}</span>
@@ -222,14 +158,34 @@ export default function PaginaInicial() {
                 <section className="quick-operations">
                     <h4>Operações Rápidas</h4>
                     <div className="operations-grid">
-                        <button className="operation-btn">Pagar</button>
-                        <button className="operation-btn">Depositar</button>
-                        <button className="operation-btn">Sacar</button>
-                        <button className="operation-btn">Cofre</button>
+                        <button className="operation-btn" type="button">
+                            <div className="icon-container">
+                                <img src={pagarIcon} alt="Pagar" />
+                            </div>
+                            Pagar
+                        </button>
+                        <button className="operation-btn" type="button">
+                            <div className="icon-container">
+                                <img src={depositarIcon} alt="Depositar" />
+                            </div>
+                            Depositar
+                        </button>
+                        <button className="operation-btn" type="button">
+                            <div className="icon-container">
+                                <img src={sacarIcon} alt="Sacar" />
+                            </div>
+                            Sacar
+                        </button>
+                        <button className="operation-btn-cofre" type="button">
+                            <div className="icon-container">
+                                <img src={cofreIcon} alt="Cofre" style={{ filter: 'grayscale(1)' }} />
+                            </div>
+                            Cofre
+                        </button>
                     </div>
                 </section>
 
-                <section className="latest-transactions">
+                <section ref={movimentacoesRef} id="movimentacoes" className="latest-transactions">
                     <h4>Últimas movimentações</h4>
                     {movimentacoes.map((mov, index) => (
                         <div key={index} className="movimentacao-item">
@@ -239,9 +195,7 @@ export default function PaginaInicial() {
                                 <p>{mov.descricao}</p>
                             </div>
                             <div className={`movimentacao-valor ${mov.valor > 0 ? 'positivo' : 'negativo'}`}>
-                                {mov.valor > 0
-                                    ? `+${mov.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
-                                    : `–${Math.abs(mov.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
+                                {formatValor(mov.valor)}
                             </div>
                         </div>
                     ))}
@@ -249,4 +203,5 @@ export default function PaginaInicial() {
             </main>
         </div>
     );
+    
 }

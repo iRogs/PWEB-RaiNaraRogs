@@ -73,7 +73,6 @@ body {
   color: #ffffff;
 }
 
-
 .main-content {
   flex-grow: 1;
   padding: 2rem 3rem;
@@ -122,7 +121,6 @@ body {
   color: #718096;
 }
 
-
 .account-card {
   background: linear-gradient(100deg, #f9a825, #f57f17);
   color: white;
@@ -164,9 +162,9 @@ body {
   font-weight: 700;
 }
 
+/* --- OperaÃ§Ãµes RÃ¡pidas --- */
 
-
-.quick-operations {
+/* .quick-operations {
   margin-top: 2.5rem;
 }
 
@@ -180,49 +178,100 @@ body {
 
 .operations-grid {
   display: grid;
-  /* Cria 4 colunas em ecrãs grandes, e adapta-se para 2 em ecrãs menores */
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem;
+} */
+
+.operation-btn,
+.operation-btn-cofre {
+  border: none;       /* Remove borda */
+}
+
+.quick-operations {
+  margin-top: 2rem;
+}
+
+.quick-operations h4 {
+  color: #4a5568;
+  margin-bottom: 2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.operations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1.5rem;
 }
 
-/* O cartão laranja que envolve o ícone e o texto */
+.operation-btn {
+  display: flex;
+  align-items: center;
+  gap: 90px;
+  background: #fbab00; /* A cor laranja do Figma */
+  color: #FFF;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  border-radius: 43px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+}
+
+.operation-btn-cofre {
+  display: flex;
+  align-items: center;
+  gap: 90px;
+  background: #8d8d8d;
+  color: #FFF;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  border-radius: 43px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+}
+
+.operation-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* O cartÃ£o laranja que envolve o Ã­cone e o texto */
 .operation-card {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Alinha os itens à esquerda */
-  gap: 90px; /* Espaço entre o ícone e o texto */
-  
+  justify-content: flex-start;
+  gap: 90px;
   height: 87px;
-  padding-left: 0px; /* Pequeno espaçamento para o ícone não colar na borda */
-  
+  padding-left: 0px;
   background: #F9BA33; /* A cor laranja do Figma */
-  border-radius: 20px 43.5px 43.5px 20px; /* O arredondamento específico do Figma */
-  
+  border-radius: 20px 43.5px 43.5px 20px; /* O arredondamento especÃ­fico do Figma */
   color: #FFF;
   font-family: "Plus Jakarta Sans", sans-serif; /* A fonte do Figma */
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.6px;
   border-radius: 43.5px;
-  
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .operation-card:hover {
-  transform: translateY(-5px); /* Efeito de elevação ao passar o rato */
+  transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* O contentor branco e redondo do ícone */
 .icon-container {
-  width: 85px;
-  height: 85px;
+  width: 70px;
+  height: 70px;
   flex-shrink: 0;
   
   background-color: #fff;
-  border-radius: 50%; /* Faz o círculo perfeito */
+  border-radius: 50%;
   
   display: flex;
   justify-content: center;
@@ -232,17 +281,11 @@ body {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
 }
 
-/* A imagem do ícone dentro do círculo */
+/* A imagem do ï¿½cone dentro do cï¿½rculo */
 .icon-container img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain; /* Garante que a imagem não fique distorcida */
-}
-
-.operation-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-color: #007bff;
+  width: 50px;
+  height: 50px;
+  object-fit: contain; 
 }
 
 .latest-transactions h4 {
@@ -276,7 +319,6 @@ body {
 .movimentacao-item:last-child {
   border-bottom: none;
 }
-
 
 .movimentacao-data {
   min-width: 100px;
@@ -321,4 +363,5 @@ body {
     margin-left: 0;
     margin-right: 0;
   }
+
 }
