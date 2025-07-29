@@ -1,5 +1,6 @@
 package ifba.edu.br.bank_api.controllers;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,13 @@ public class OperacaoController {
         String mensagem = operacaoService.sacar(usuario.getConta().getId(), dto.valor());
         URI uri = uriBuilder.path("/operacoes/sacar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
+    }
+
+     @GetMapping("/saldo")
+    public ResponseEntity<BigDecimal> consultarSaldo() {
+        Usuario usuarioLogado = getUsuarioLogado();
+        BigDecimal saldo = operacaoService.consultarSaldo(usuarioLogado.getConta().getId());
+        return ResponseEntity.ok(saldo);
     }
 
     @PostMapping("/pagar")
