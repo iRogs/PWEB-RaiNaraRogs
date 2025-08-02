@@ -66,9 +66,9 @@ public class OperacaoController {
     }
 
     @PostMapping("/pagar")
-    public ResponseEntity<String> pagar(@RequestBody @Valid PagamentoDTO dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<String> pagar(@RequestBody @Valid OperacaoDTO dto, UriComponentsBuilder uriBuilder) {
         Usuario usuario = getUsuarioLogado();
-        String mensagem = operacaoService.pagar(usuario.getConta().getId(), dto.idContaTo(), dto.valor(), dto.descricao());
+        String mensagem = operacaoService.pagar(usuario.getConta().getId(), dto.valor(), dto.descricao());
         URI uri = uriBuilder.path("/operacoes/pagar").build().toUri();
         return ResponseEntity.created(uri).body(mensagem);
     }
