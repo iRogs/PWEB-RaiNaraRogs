@@ -1,3 +1,4 @@
+
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import api from '../services/api';
@@ -156,7 +157,7 @@ export default function PaginaInicial() {
                 </section>
 
                 <section className="quick-operations">
-                    <h4>Operações Rápidas</h4>
+                    <h4>Operaï¿½ï¿½es Rï¿½pidas</h4>
                     <div className="operations-grid">
                         <button className="operation-btn" type="button">
                             <div className="icon-container">
