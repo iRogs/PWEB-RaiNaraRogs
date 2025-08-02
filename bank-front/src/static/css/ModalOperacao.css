@@ -1,0 +1,127 @@
+/* Fundo escurecido que cobre a página inteira */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* O container laranja, agora posicionado como um modal */
+.modal-operacao-container {
+    width: 100%;
+    max-width: 800px; /* Largura ajustada para um pop-up */
+    height: auto; /* Altura automática para se ajustar ao conteúdo */
+    min-height: 500px;
+    flex-shrink: 0;
+    border-radius: 20px; /* Borda em todos os cantos */
+    background: #F9BA33;
+    padding: 2.5rem 2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    position: relative; /* Necessário para posicionar o botão de fechar */
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* Botão para fechar o modal */
+.modal-close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-operacao-container h2 {
+    color: #FFF;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0.96px;
+    margin: 0;
+}
+
+.modal-valor-display {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.modal-valor-display .valor {
+    color: #FFF;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 80px;
+    font-weight: 800;
+}
+
+.modal-valor-display .disponivel {
+    color: #FFF;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.modal-form-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 350px;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.modal-form-inputs input {
+    width: 100%;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-submit-btn {
+    width: 259px;
+    height: 51px;
+    border-radius: 40px;
+    background: #FFF;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: none;
+    cursor: pointer;
+    color: #F9BA33;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-submit-btn:hover {
+    transform: scale(1.05);
+}

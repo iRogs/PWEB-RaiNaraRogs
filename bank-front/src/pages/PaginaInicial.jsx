@@ -7,11 +7,17 @@ import pagarIcon from '../assets/img/pagar.png';
 import depositarIcon from '../assets/img/depositar.png';
 import sacarIcon from '../assets/img/sacar.png';
 import cofreIcon from '../assets/img/cofrinho.png';
+import ModalOperacao from '../components/ModalOperacao';
+import FormularioPagar from '../components/FormularioPagar';
+import FormularioSacar from '../components/FormularioSacar';
+import FormularioDepositar from '../components/FormularioDepositar';
+
 
 export default function PaginaInicial() {
     const { usuario, signOut } = useContext(AuthContext);
     const [saldo, setSaldo] = useState(0);
     const [loadingSaldo, setLoadingSaldo] = useState(true);
+    const [modalAberto, setModalAberto] = useState(null); 
     const movimentacoesRef = useRef(null);
 
     useEffect(() => {
@@ -35,45 +41,18 @@ export default function PaginaInicial() {
             fetchSaldo();
         }
 
+        
+
+        
+
         return () => {
             isMounted = false;
         };
     }, [usuario]);
 
-    // Tentativa de buscar as movimentaÃ§Ãµes (extrato) via API
-    // useEffect(() => {
-    //     let isMounted = true;
-
-    //     if (usuario) {
-    //         async function fetchMovimentacoes() {
-    //             try {
-    //                 const anoAtual = new Date().getFullYear();
-    //                 const inicio = `${anoAtual}-01-01T00:00:00`;
-    //                 const fim = `${anoAtual}-12-31T23:59:59`;
-
-    //                 const response = await api.get('/banking-api/operacoes/extrato', {
-    //                     params: {
-    //                         contaId: usuario.id,
-    //                         inicio,
-    //                         fim
-    //                     }
-    //                 });
-
-    //                 if (isMounted) setMovimentacoes(response.data);
-    //             } catch (error) {
-    //                 console.error("Erro ao buscar movimentaÃ§Ãµes:", error);
-    //             } finally {
-    //                 if (isMounted) setLoadingMov(false);
-    //             }
-    //         }
-
-    //         fetchMovimentacoes();
-    //     }
-
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [usuario]);
+    const abrirModal = (tipo) => {
+        setModalAberto(tipo);
+    };
 
     if (!usuario) {
         return <div>Carregando...</div>;
@@ -158,19 +137,19 @@ export default function PaginaInicial() {
                 <section className="quick-operations">
                     <h4>Operações Rápidas</h4>
                     <div className="operations-grid">
-                        <button className="operation-btn" type="button">
+                       <button className="operation-btn" type="button" onClick={() => abrirModal('pagar')}>
                             <div className="icon-container">
                                 <img src={pagarIcon} alt="Pagar" />
                             </div>
                             Pagar
                         </button>
-                        <button className="operation-btn" type="button">
+                        <button className="operation-btn" type="button" onClick={() => abrirModal('depositar')}>
                             <div className="icon-container">
                                 <img src={depositarIcon} alt="Depositar" />
                             </div>
                             Depositar
                         </button>
-                        <button className="operation-btn" type="button">
+                       <button className="operation-btn" type="button" onClick={() => abrirModal('sacar')}>
                             <div className="icon-container">
                                 <img src={sacarIcon} alt="Sacar" />
                             </div>
@@ -202,6 +181,8 @@ export default function PaginaInicial() {
                 </section>
             </main>
         </div>
+    
+        
     );
     
 }
