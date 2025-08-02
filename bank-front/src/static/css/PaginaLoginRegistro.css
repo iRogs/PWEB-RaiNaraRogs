@@ -105,7 +105,7 @@ body {
 
 .character-image {
   width: 200px;
-  height: 280px; /* mesma altura para todos os personagens */
+  height: 280px;
   object-fit: contain;
   margin-top: 0;
   display: block;

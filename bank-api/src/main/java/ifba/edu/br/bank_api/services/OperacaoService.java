@@ -7,6 +7,8 @@ import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.OperacaoRepository;
+
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -52,9 +54,9 @@ public class OperacaoService {
         contaRepository.save(conta);
 
         salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "Dep√≥sito");
-        enviarEmail(conta, "Dep√≥sito", amount);
+        enviarEmail(conta, "DepÛsito", amount);
 
-        return "Dep√≥sito realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
+        return "DepÛsito realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
     public String sacar(Long accountId, BigDecimal amount) {
@@ -76,27 +78,26 @@ public class OperacaoService {
         return "Saque realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
-    public String pagar(Long accountFrom, Long accountTo, BigDecimal amount, String descricao) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
-        }
 
-        Conta contaFrom = findAccount(accountFrom);
-        Conta contaTo = findAccount(accountTo);
+    public String pagar(Long contaId, BigDecimal valor, String descricao) {
+    if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
+        throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
+    }
 
-        if (contaFrom.getSaldo().compareTo(amount) < 0) {
-            throw new IllegalArgumentException("Saldo insuficiente para pagamento.");
-        }
-        
-        salvarOperacao(contaFrom, TipoOperacao.PAGAMENTO, amount, descricao);
-        salvarOperacao(contaTo, TipoOperacao.DEPOSITO, amount, descricao);
-        contaFrom.setSaldo(contaFrom.getSaldo().subtract(amount));
-        contaTo.setSaldo(contaTo.getSaldo().add(amount));
-        contaRepository.save(contaFrom);
-        enviarEmail(contaFrom, "Pagamento: " + descricao, amount);
-        enviarEmail(contaTo, "Pagamento recebido: " + descricao, amount);
+    Conta conta = findAccount(contaId);
 
-        return "Pagamento realizado com sucesso. Novo saldo: R$ " + contaFrom.getSaldo();
+    if (conta.getSaldo().compareTo(valor) < 0) {
+        throw new IllegalArgumentException("Saldo insuficiente para pagamento.");
+    }
+
+    conta.setSaldo(conta.getSaldo().subtract(valor));
+    contaRepository.save(conta);
+
+    salvarOperacao(conta, TipoOperacao.PAGAMENTO, valor, descricao);
+
+    enviarEmail(conta, "Pagamento: " + descricao, valor);
+
+    return "Pagamento '" + descricao + "' realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
     public List<Operacao> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim) {

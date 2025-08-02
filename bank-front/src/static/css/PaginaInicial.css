@@ -188,7 +188,7 @@ body {
 }
 
 .quick-operations {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .quick-operations h4 {
@@ -207,7 +207,7 @@ body {
 .operation-btn {
   display: flex;
   align-items: center;
-  gap: 90px;
+  gap: 15px;
   background: #fbab00; /* A cor laranja do Figma */
   color: #FFF;
   font-size: 1rem;
@@ -222,7 +222,7 @@ body {
 .operation-btn-cofre {
   display: flex;
   align-items: center;
-  gap: 90px;
+  gap: 15px;
   background: #8d8d8d;
   color: #FFF;
   font-size: 1rem;
@@ -244,7 +244,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 90px;
+  gap: 15px;
   height: 87px;
   padding-left: 0px;
   background: #F9BA33; /* A cor laranja do Figma */

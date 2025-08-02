@@ -5,6 +5,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,7 +58,7 @@ public class OperacaoController {
         return ResponseEntity.created(uri).body(mensagem);
     }
 
-     @GetMapping("/saldo")
+    @GetMapping("/saldo")
     public ResponseEntity<BigDecimal> consultarSaldo() {
         Usuario usuarioLogado = getUsuarioLogado();
         BigDecimal saldo = operacaoService.consultarSaldo(usuarioLogado.getConta().getId());

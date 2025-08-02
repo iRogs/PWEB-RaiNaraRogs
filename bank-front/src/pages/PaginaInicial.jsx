@@ -156,7 +156,7 @@ export default function PaginaInicial() {
                 </section>
 
                 <section className="quick-operations">
-                    <h4>OperaÃ§Ãµes RÃ¡pidas</h4>
+                    <h4>Operações Rápidas</h4>
                     <div className="operations-grid">
                         <button className="operation-btn" type="button">
                             <div className="icon-container">
