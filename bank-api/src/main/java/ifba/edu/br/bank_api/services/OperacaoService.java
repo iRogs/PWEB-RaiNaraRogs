@@ -43,7 +43,6 @@ public class OperacaoService {
         return conta.getSaldo();
     }
 
-
     public String depositar(Long accountId, BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor do dep贸sito deve ser maior que zero.");
@@ -54,9 +53,9 @@ public class OperacaoService {
         contaRepository.save(conta);
 
         salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "Dep贸sito");
-        enviarEmail(conta, "Dep髎ito", amount);
+        enviarEmail(conta, "Dep贸sito", amount);
 
-        return "Dep髎ito realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
+        return "Dep贸sito realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
     public String sacar(Long accountId, BigDecimal amount) {
