@@ -135,13 +135,13 @@ export default function PaginaInicial() {
                           A estrutura deve ser limpa assim para funcionar.
                         */}
                         {modalAberto === 'pagar' && (
-                            <FormularioPagar onSuccess={handleOperacaoSuccess} />
+                            <FormularioPagar onSuccess={handleOperacaoSuccess} saldo={saldo}/>
                         )}
                         {modalAberto === 'depositar' && (
-                            <FormularioDepositar onSuccess={handleOperacaoSuccess} />
+                            <FormularioDepositar onSuccess={handleOperacaoSuccess}  saldo={saldo}/>
                         )}
                         {modalAberto === 'sacar' && (
-                            <FormularioSacar onSuccess={handleOperacaoSuccess} />
+                            <FormularioSacar onSuccess={handleOperacaoSuccess} saldo={saldo}/>
                         )}
                     </div>
                 </div>

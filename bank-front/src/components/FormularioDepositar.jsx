@@ -1,45 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import api from '../services/api';
 
-import { formatarParaReal, desformatarReal } from '../utils/FormatarValor';
-
-export default function FormularioDepositar({ onSuccess }) {
-
-    const [valor, setValor] = useState('');
+export default function FormularioDepositar({ onSuccess, saldo }) {
+    const [valorRaw, setValorRaw] = useState(''); // Armazena apenas os números, ex: "1250" para R$ 12,50
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const hiddenInputRef = useRef(null);
 
-    const handleChange = (e) => {
-        const valorFormatado = formatarParaReal(e.target.value);
-        setValor(valorFormatado);
+    const handleInputChange = (e) => {
+        const rawValue = e.target.value.replace(/\D/g, '');
+        setValorRaw(rawValue);
+    };
+
+    const formatDisplayValue = () => {
+        if (!valorRaw) return '0,00';
+        const number = parseInt(valorRaw, 10) / 100;
+        return number.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        setLoading(true);
-        setSuccess(false);
+        const valorFloat = parseFloat(valorRaw) / 100;
 
-        const valorFloat = desformatarReal(valor);
-
-        if (valorFloat <= 0) {
+        if (!valorFloat || valorFloat <= 0) {
             setError('O valor deve ser maior que zero.');
-            setLoading(false);
             return;
         }
 
+        setLoading(true);
+        setSuccess(false);
+
         try {
-            await api.post('/banking-api/operacoes/depositar', {
-                valor: valorFloat,
-            });
-            setValor('');
+            await api.post('/banking-api/operacoes/depositar', { valor: valorFloat });
+            setValorRaw('');
             setSuccess(true);
-            setTimeout(() => {
-                onSuccess();
-            }, 1500);
+            setTimeout(() => onSuccess(), 1500);
         } catch (err) {
-            const msg = err.response?.data || 'Erro ao processar depÃ³sito.';
+            const msg = err.response?.data || 'Erro ao processar depósito.';
             setError(msg);
         } finally {
             setLoading(false);
@@ -48,54 +47,38 @@ export default function FormularioDepositar({ onSuccess }) {
 
     return (
         <>
-        <div className="modal-header">
-            <h2>Depositar</h2>
-            <button
-            className="modal-close-button"
-            onClick={() => onSuccess(null)}
-            disabled={loading}
-            aria-label="Fechar modal"
-            >
-            Ã—
-            </button>
-        </div>
+            <div className="modal-header-white">
+                <button type="button" className="modal-close-button" onClick={() => onSuccess(null)}>&times;</button>
+            </div>
 
-        <form onSubmit={handleSubmit} className="modal-form-inputs" noValidate>
-            <input
-            type="text"
-            placeholder="Valor a depositar"
-            value={valor}
-            onChange={handleChange}
-            required
-            disabled={loading}
-            aria-label="Valor a depositar"
-            maxLength={15}
-            inputMode="numeric"
-            pattern="[0-9.,]*"
-            />
+            <div className="modal-content-area">
+                {/* A área clicável agora foca o input escondido */}
+                <div className="modal-valor-input-area" onClick={() => hiddenInputRef.current?.focus()}>
+                    <h2 className="titulo">Selecione o valor</h2>
+                    <div className="valor">
+                        <span className="prefixo">R$</span>
+                        <span>{formatDisplayValue()}</span>
+                    </div>
+                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponíveis</p>
+                </div>
 
-            <button
-            type="submit"
-            className="modal-submit-btn"
-            disabled={loading}
-            aria-busy={loading}
-            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-            >
-            {loading ? (
-                <span className="loader" aria-label="Carregando..." />
-            ) : success ? (
-                <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4BB543"
-                strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-label="Sucesso" width="24" height="24">
-                <path d="M20 6L9 17l-5-5" />
-                </svg>
-            ) : (
-                'Depositar'
-            )}
-            </button>
-        </form>
-
-        {error && <p style={{ color: 'red', marginTop: '0.3rem' }}>{error}</p>}
+                <form onSubmit={handleSubmit} className="modal-form">
+                    {/* Este input fica escondido, mas é ele quem captura o que você digita */}
+                    <input
+                        ref={hiddenInputRef}
+                        type="tel"
+                        value={valorRaw}
+                        onChange={handleInputChange}
+                        style={{ position: 'absolute', opacity: 0, width: '1px', height: '1px', pointerEvents: 'none' }}
+                        aria-hidden="true"
+                        autoFocus
+                    />
+                    <button type="submit" className="modal-submit-btn" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {loading ? <span className="loader" /> : success ? 'Sucesso!' : 'Depositar'}
+                    </button>
+                </form>
+                {error && <p style={{ color: 'white', marginTop: '0.3rem', textShadow: '1px 1px 2px #000' }}>{error}</p>}
+            </div>
         </>
     );
-
 }
