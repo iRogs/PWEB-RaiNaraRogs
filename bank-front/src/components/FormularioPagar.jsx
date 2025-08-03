@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../services/api';
+
 import { formatarParaReal, desformatarReal } from '../utils/FormatarValor';
 
 export default function FormularioPagar({ onSuccess }) {
@@ -41,8 +42,10 @@ export default function FormularioPagar({ onSuccess }) {
                 onSuccess();
             }, 1500);
         } catch (err) {
-            const msg = err.response?.data || 'Erro ao processar pagamento.';
-            setError(msg);
+            if (err.response?.status === 403) {
+                return setError('O saldo atual é insuficiente para realizar o pagamento.');
+            }
+            console.log('Erro ao processar pagamento:', err);
         } finally {
             setLoading(false);
         }
@@ -109,4 +112,5 @@ export default function FormularioPagar({ onSuccess }) {
             {error && <p style={{ color: 'red', marginTop: '0.3rem' }}>{error}</p>}
         </>
     );
+
 }

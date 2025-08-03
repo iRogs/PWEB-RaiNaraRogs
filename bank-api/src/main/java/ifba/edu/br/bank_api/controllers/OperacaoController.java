@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
-import ifba.edu.br.bank_api.dtos.PagamentoDTO;
 import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.entities.Usuario;

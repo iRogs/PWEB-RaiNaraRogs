@@ -60,7 +60,6 @@ export default function PaginaInicial() {
 
     function abrirModal(tipo) {
         setModalAberto(tipo);
-        console.log(`Modal aberto: ${tipo}`);
     }
     
     const handleOperacaoSuccess = () => {

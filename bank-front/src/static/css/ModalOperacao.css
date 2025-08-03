@@ -1,3 +1,7 @@
+body {
+    font-family: 'Inter', sans-serif !important;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -47,17 +51,6 @@
     animation: zoomIn 0.3s ease-out;
 }
 
-@keyframes zoomIn {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 .modal-close-button {
     position: absolute;
     top: 15px;
@@ -73,7 +66,6 @@
 .modal-operacao-container h2 {
     color: #FFF;
     text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 32px;
     font-weight: 600;
     margin-bottom: -300rem;
@@ -82,7 +74,6 @@
 .modal-operacao-container-pagar h2 {
     color: #FFF;
     text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 32px;
     font-weight: 600;
 }
@@ -94,7 +85,6 @@
 
 .modal-valor-display .valor {
     color: #FFF;
-    font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 80px;
     font-weight: 800;
 }
@@ -137,7 +127,6 @@
     border: none;
     cursor: pointer;
     color: #F9BA33;
-    font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 18px;
     font-weight: 700;
     transition: all 0.2s ease-in-out;
@@ -167,5 +156,16 @@
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
     }
 }

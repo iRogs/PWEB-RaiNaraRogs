@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
+
 import loadingGif from "../assets/img/loading.gif";
+import { useNavigate } from 'react-router-dom';
+import { formatarCPF } from '../utils/FormatarCPF';
 
 export default function FormularioRegistro() {
 
@@ -15,15 +17,6 @@ export default function FormularioRegistro() {
     const [toastVisivel, setToastVisivel] = useState(false);
 
     const navigate = useNavigate();
-
-    function formatarCPF(valor) {
-        return valor
-            .replace(/\D/g, '')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-            .slice(0, 14);
-    }
 
     useEffect(() => {
         if (mensagemToast) {
@@ -92,7 +85,6 @@ export default function FormularioRegistro() {
                 </div>
             )}
 
-            {/* Toast fixo no canto da tela */}
             {mensagemToast && (
                 <div
                     className={`toast no-zoom ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
