@@ -49,7 +49,7 @@ export default function FormularioRegistro() {
                 { headers: { 'Content-Type': 'application/json' }, auth: false }
             );
 
-            setMensagemToast({ texto: 'Parabéns! Estamos te levando para página de login...', tipo: 'success' });
+            setMensagemToast({ texto: 'ParabÃ©ns! Estamos te levando para pÃ¡gina de login...', tipo: 'success' });
 
             setCpf('');
             setNome('');
@@ -61,7 +61,7 @@ export default function FormularioRegistro() {
             }, 7000);
 
         } catch (error) {
-            console.error("Erro ao cadastrar usuário:", error);
+            console.error("Erro ao cadastrar usuÃ¡rio:", error);
             if (error.response) {
                 setMensagemToast({
                     texto: `Erro ${error.response.status}: ${error.response.data.message || 'Erro ao cadastrar.'}`,

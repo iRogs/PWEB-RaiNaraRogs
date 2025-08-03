@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import api from '../services/api';
 
 export default function FormularioDepositar({ onSuccess, saldo }) {
-    const [valorRaw, setValorRaw] = useState(''); // Armazena apenas os números, ex: "1250" para R$ 12,50
+    const [valorRaw, setValorRaw] = useState(''); // Armazena apenas os nÃºmeros, ex: "1250" para R$ 12,50
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -38,7 +38,7 @@ export default function FormularioDepositar({ onSuccess, saldo }) {
             setSuccess(true);
             setTimeout(() => onSuccess(), 1500);
         } catch (err) {
-            const msg = err.response?.data || 'Erro ao processar depósito.';
+            const msg = err.response?.data || 'Erro ao processar depÃ³sito.';
             setError(msg);
         } finally {
             setLoading(false);
@@ -52,18 +52,18 @@ export default function FormularioDepositar({ onSuccess, saldo }) {
             </div>
 
             <div className="modal-content-area">
-                {/* A área clicável agora foca o input escondido */}
+                {/* A Ã¡rea clicÃ¡vel agora foca o input escondido */}
                 <div className="modal-valor-input-area" onClick={() => hiddenInputRef.current?.focus()}>
                     <h2 className="titulo">Selecione o valor</h2>
                     <div className="valor">
                         <span className="prefixo">R$</span>
                         <span>{formatDisplayValue()}</span>
                     </div>
-                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponíveis</p>
+                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponÃ­veis</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal-form">
-                    {/* Este input fica escondido, mas é ele quem captura o que você digita */}
+                    {/* Este input fica escondido, mas Ã© ele quem captura o que vocÃª digita */}
                     <input
                         ref={hiddenInputRef}
                         type="tel"

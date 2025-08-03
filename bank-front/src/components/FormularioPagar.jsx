@@ -30,7 +30,7 @@ export default function FormularioPagar({ onSuccess, saldo }) {
             return;
         }
         if (!descricao) {
-            setError('A descrição é obrigatória.');
+            setError('A descriÃ§Ã£o Ã© obrigatÃ³ria.');
             return;
         }
 
@@ -45,7 +45,7 @@ export default function FormularioPagar({ onSuccess, saldo }) {
             setTimeout(() => onSuccess(), 1500);
         } catch (err) {
             if (err.response?.data?.includes("insuficiente")) {
-                setError('O saldo atual é insuficiente para o pagamento.');
+                setError('O saldo atual Ã© insuficiente para o pagamento.');
             } else {
                 setError('Erro ao processar o pagamento. Tente novamente.');
             }
@@ -67,7 +67,7 @@ export default function FormularioPagar({ onSuccess, saldo }) {
                         <span className="prefixo">R$</span>
                         <span>{formatDisplayValue()}</span>
                     </div>
-                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponíveis</p>
+                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponÃ­veis</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal-form">
@@ -82,7 +82,7 @@ export default function FormularioPagar({ onSuccess, saldo }) {
                     />
                     <input
                         type="text"
-                        placeholder="Descrição (Ex: Conta de Luz)"
+                        placeholder="DescriÃ§Ã£o (Ex: Conta de Luz)"
                         value={descricao}
                         onChange={e => setDescricao(e.target.value)}
                         required

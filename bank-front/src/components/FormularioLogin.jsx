@@ -81,7 +81,7 @@ export default function FormularioLogin() {
             </div>
             <button type="submit" disabled={loadingLocal}>Login</button>
 
-            {/* Gif de loading abaixo do botão */}
+            {/* Gif de loading abaixo do botÃ£o */}
             {showLoadingGif && (
               <div
                   className="loader-container"
@@ -92,7 +92,7 @@ export default function FormularioLogin() {
             )}
           </form>
 
-          {/* Toast local para erros de validação e sucesso */}
+          {/* Toast local para erros de validaÃ§Ã£o e sucesso */}
           {mensagemToast && (
               <div
                 className={`toast no-zoom ${toastVisivel ? "visible" : "hidden"} ${mensagemToast.tipo}`}
@@ -102,7 +102,7 @@ export default function FormularioLogin() {
               </div>
           )}
 
-          {/* Toast global do contexto para erros do backend (já aparece fixo no canto) */}
+          {/* Toast global do contexto para erros do backend (jÃ¡ aparece fixo no canto) */}
         </>
     );
 

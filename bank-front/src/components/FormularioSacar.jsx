@@ -39,7 +39,7 @@ export default function FormularioSacar({ onSuccess, saldo }) {
             setTimeout(() => onSuccess(), 1500);
         } catch (err) {
             if (err.response?.data?.includes("insuficiente")) {
-                setError('O saldo atual é insuficiente para realizar o saque.');
+                setError('O saldo atual Ã© insuficiente para realizar o saque.');
             } else {
                 setError('Erro ao processar o saque. Tente novamente.');
             }
@@ -61,7 +61,7 @@ export default function FormularioSacar({ onSuccess, saldo }) {
                         <span className="prefixo">R$</span>
                         <span>{formatDisplayValue()}</span>
                     </div>
-                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponíveis</p>
+                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponÃ­veis</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal-form">

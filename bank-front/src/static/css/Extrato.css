@@ -1,4 +1,10 @@
-/* Estilos para a seção do extrato */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700&display=swap');/* Estilos para a seção do extrato */
+
+
+body {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
 .extrato-container {
     margin-top: 2.5rem;
     background-color: #ffffff;
@@ -12,7 +18,7 @@
     margin-top: 0;
     margin-bottom: 1.5rem;
     font-size: 1.25rem;
-    font-weight: 600;
+    
 }
 
 .extrato-filtros {
@@ -46,21 +52,26 @@
 }
 
 .extrato-filtros button {
-    align-self: flex-end; /* Alinha o botão com a base dos inputs */
-    padding: 10px 20px;
+    align-self: flex-end;
+    padding: 12px 25px; /* Ajusta o padding para o novo tamanho */
     border: none;
-    border-radius: 6px;
-    background-color: #334155;
+    border-radius: 43px; /* Bordas arredondadas como os outros botões */
+    background-color: #334155; /* Cor padrão dos botões */
     color: white;
-    font-weight: 600;
+    font-family: "Plus Jakarta Sans", sans-serif; /* Fonte padrão */
+    font-weight: 700;
+    font-size: 16px; /* Tamanho da fonte ajustado para o contexto */
+    letter-spacing: 0.6px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .extrato-filtros button:hover {
-    background-color: #475569;
+    background-color: #f57f17; /* Efeito hover mais escuro */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-
 .extrato-lista {
     border-top: 1px solid #e2e8f0;
 }

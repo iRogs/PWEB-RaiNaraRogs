@@ -34,9 +34,9 @@
     background: #FFF;
     border-radius: 20px 20px 0 0;
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 20px;
+    justify-content: flex-end; /* Alinha o botão à direita */
+    align-items: center; /* Centraliza verticalmente */
+    padding: 0 15px;
     flex-shrink: 0;
 }
 
@@ -46,22 +46,30 @@
     color: #333;
     font-size: 2.5rem;
     cursor: pointer;
+    padding: 0;
+    margin: 0;
     line-height: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content-area {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
     padding: 2.5rem 2rem;
     gap: 1.5rem;
     width: 100%;
+    flex-grow: 1;
 }
 
 .modal-valor-input-area {
     text-align: center;
-    cursor: text; /* Indica que a área é clicável para inserir texto */
+    cursor: text;
 }
 
 .modal-valor-input-area .titulo {
@@ -149,7 +157,6 @@
     transform: scale(1.02);
 }
 
-/* Animações e loaders */
 .loader { display: inline-block; width: 20px; height: 20px; border: 3px solid #f9ba33; border-top: 3px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; vertical-align: middle; margin: 0 auto; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
