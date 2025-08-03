@@ -1,9 +1,9 @@
-export function formatarParaReal(valor) {
-  const valorNumerico = valor.replace(/\D/g, '');
-  const numero = parseInt(valorNumerico, 10) / 100;
-  return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+export function formatRawValue(value) {
+    return value.replace(/\D/g, '');
 }
 
-export function desformatarReal(valorFormatado) {
-  return parseFloat(valorFormatado.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+export function formatToBRL(valorRaw) {
+    if (!valorRaw) return '0,00';
+    const number = parseInt(valorRaw, 10) / 100;
+    return number.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

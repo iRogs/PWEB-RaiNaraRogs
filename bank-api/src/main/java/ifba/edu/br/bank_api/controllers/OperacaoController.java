@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
 import ifba.edu.br.bank_api.dtos.OperacaoResponseDTO;
-import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.entities.Usuario;
 import ifba.edu.br.bank_api.services.JWTokenService;

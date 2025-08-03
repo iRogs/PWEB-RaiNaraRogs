@@ -54,7 +54,7 @@ public class OperacaoService {
         conta.setSaldo(conta.getSaldo().add(amount));
         contaRepository.save(conta);
 
-        salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "Depósito");
+        salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "Depósito em conta");
         enviarEmail(conta, "Depósito", amount);
 
         return "Depósito realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
@@ -73,7 +73,7 @@ public class OperacaoService {
         conta.setSaldo(conta.getSaldo().subtract(amount));
         contaRepository.save(conta);
 
-        salvarOperacao(conta, TipoOperacao.SAQUE, amount, "Saque");
+        salvarOperacao(conta, TipoOperacao.SAQUE, amount, "Valor retirado da conta");
         enviarEmail(conta, "Saque", amount);
 
         return "Saque realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
@@ -108,7 +108,7 @@ public class OperacaoService {
     } else {
         operacoes = operacaoRepository.findByContaAndDataBetween(conta, inicio, fim);
     }
-    // Mapeia a lista de entidades para a lista de DTOs
+
     return operacoes.stream()
                     .map(OperacaoResponseDTO::new)
                     .collect(Collectors.toList());

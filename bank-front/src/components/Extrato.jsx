@@ -1,22 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import '../static/css/Extrato.css';
-
-// Funções de formatação de data para a API
-const formatarDataParaAPI = (dataString) => {
-    if (!dataString) return '';
-    return `${dataString}T00:00:00`;
-};
-
-const formatarDataFimParaAPI = (dataString) => {
-    if (!dataString) return '';
-    return `${dataString}T23:59:59`;
-};
-
-// Funções para gerar as datas padrão
-const getISODateString = (date) => {
-    return date.toISOString().split('T')[0];
-};
+import {
+    formatarDataParaAPI,
+    formatarDataFimParaAPI,
+    getISODateString,
+    formatarDataDisplay
+} from '../utils/FormatarData.jsx';
 
 const hoje = new Date();
 const trintaDiasAtras = new Date();
@@ -26,6 +16,7 @@ const dataFimPadrao = getISODateString(hoje);
 const dataInicioPadrao = getISODateString(trintaDiasAtras);
 
 export default function Extrato({ usuario, refreshTrigger }) {
+    
     const [movimentacoes, setMovimentacoes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [dataInicio, setDataInicio] = useState(dataInicioPadrao);
@@ -48,7 +39,8 @@ export default function Extrato({ usuario, refreshTrigger }) {
         try {
             const response = await api.get('/banking-api/operacoes/extrato', { params });
             if (Array.isArray(response.data)) {
-                setMovimentacoes(response.data);
+                const dadosOrdenados = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
+                setMovimentacoes(dadosOrdenados);
             } else {
                 setMovimentacoes([]);
             }
@@ -64,19 +56,10 @@ export default function Extrato({ usuario, refreshTrigger }) {
         fetchMovimentacoes();
     }, [fetchMovimentacoes, refreshTrigger]);
 
-    const handleFiltrarClick = () => {
-        fetchMovimentacoes();
-    };
-    
-    const formatarDataDisplay = (dataString) => {
-        const data = new Date(dataString);
-        return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    };
-
     return (
         <section id="movimentacoes" className="extrato-container">
             <h4>Últimas movimentações</h4>
-            
+
             <div className="extrato-filtros">
                 <div className="filtro-grupo">
                     <label htmlFor="data-inicio">Data Início</label>
@@ -95,7 +78,6 @@ export default function Extrato({ usuario, refreshTrigger }) {
                         <option value="PAGAMENTO">Pagamento</option>
                     </select>
                 </div>
-                <button onClick={handleFiltrarClick}>Filtrar</button>
             </div>
 
             <div className="extrato-lista">
@@ -103,11 +85,13 @@ export default function Extrato({ usuario, refreshTrigger }) {
                     <p className="loading-extrato">A carregar movimentações...</p>
                 ) : movimentacoes.length > 0 ? (
                     movimentacoes.map((mov) => {
-                        // LÓGICA CORRIGIDA AQUI
                         const isDeposito = mov.tipo === 'DEPOSITO';
                         const valorClasse = isDeposito ? 'positivo' : 'negativo';
                         const valorSinal = isDeposito ? '+' : '-';
-                        const valorFormatado = Math.abs(mov.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        const valorFormatado = Math.abs(mov.valor).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                        });
 
                         return (
                             <div key={mov.id} className="movimentacao-item">
@@ -128,4 +112,5 @@ export default function Extrato({ usuario, refreshTrigger }) {
             </div>
         </section>
     );
+
 }
