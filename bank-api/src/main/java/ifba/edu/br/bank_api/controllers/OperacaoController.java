@@ -5,7 +5,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
+import ifba.edu.br.bank_api.dtos.OperacaoResponseDTO;
 import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.entities.Usuario;
@@ -72,15 +73,18 @@ public class OperacaoController {
         return ResponseEntity.created(uri).body(mensagem);
     }
 
+
     @GetMapping("/extrato")
-    public ResponseEntity<List<Operacao>> consultarExtrato(
-        @RequestParam Long contaId,
-        @RequestParam(required = false) TipoOperacao tipo,
-        @RequestParam LocalDateTime inicio,
-        @RequestParam LocalDateTime fim
-    ) {
-        List<Operacao> extrato = operacaoService.extrato(contaId, tipo, inicio, fim);
-        return ResponseEntity.ok(extrato);
-    }
+public ResponseEntity<List<OperacaoResponseDTO>> consultarExtrato(
+    @RequestParam(required = false) TipoOperacao tipo,
+    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
+) {
+    Usuario usuarioLogado = getUsuarioLogado(); 
+    Long contaId = usuarioLogado.getConta().getId(); 
+
+    List<OperacaoResponseDTO> extrato = operacaoService.extrato(contaId, tipo, inicio, fim);
+    return ResponseEntity.ok(extrato);
+}
 
 }

@@ -1,0 +1,124 @@
+/* Estilos para a seção do extrato */
+.extrato-container {
+    margin-top: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.extrato-container h4 {
+    color: #4a5568;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.extrato-filtros {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; /* Para telas menores */
+}
+
+.extrato-filtros .filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.extrato-filtros label {
+    font-size: 0.9rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+.extrato-filtros input,
+.extrato-filtros select {
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    min-width: 180px;
+}
+
+.extrato-filtros button {
+    align-self: flex-end; /* Alinha o botão com a base dos inputs */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #334155;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.extrato-filtros button:hover {
+    background-color: #475569;
+}
+
+.extrato-lista {
+    border-top: 1px solid #e2e8f0;
+}
+
+.movimentacao-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.movimentacao-item:last-child {
+    border-bottom: none;
+}
+
+.movimentacao-info {
+    flex: 1;
+    margin: 0 1.5rem;
+}
+
+.movimentacao-info strong {
+    display: block;
+    color: #2d3748;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.movimentacao-info p {
+    margin: 0;
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.movimentacao-data {
+    color: #718096;
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+}
+
+.movimentacao-valor {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.movimentacao-valor.positivo {
+    color: #16a34a; /* Verde */
+}
+
+.movimentacao-valor.negativo {
+    color: #dc2626; /* Vermelho */
+}
+
+.loading-extrato,
+.extrato-vazio {
+    text-align: center;
+    padding: 2rem;
+    color: #718096;
+    font-style: italic;
+}

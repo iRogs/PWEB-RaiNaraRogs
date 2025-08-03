@@ -2,6 +2,7 @@ package ifba.edu.br.bank_api.services;
 
 import ifba.edu.br.bank_api.Client.EmailClient;
 import ifba.edu.br.bank_api.Client.EmailDTO;
+import ifba.edu.br.bank_api.dtos.OperacaoResponseDTO;
 import ifba.edu.br.bank_api.entities.Conta;
 import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OperacaoService {
@@ -98,15 +100,19 @@ public class OperacaoService {
     return "Pagamento '" + descricao + "' realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
-    public List<Operacao> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim) {
-        Conta conta = findAccount(accountId);
-
-        if (tipo != null) {
-            return operacaoRepository.findByContaAndTipoAndDataBetween(conta, tipo, inicio, fim);
-        } else {
-            return operacaoRepository.findByContaAndDataBetween(conta, inicio, fim);
-        }
+    public List<OperacaoResponseDTO> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim) {
+    Conta conta = findAccount(accountId);
+    List<Operacao> operacoes;
+    if (tipo != null) {
+        operacoes = operacaoRepository.findByContaAndTipoAndDataBetween(conta, tipo, inicio, fim);
+    } else {
+        operacoes = operacaoRepository.findByContaAndDataBetween(conta, inicio, fim);
     }
+    // Mapeia a lista de entidades para a lista de DTOs
+    return operacoes.stream()
+                    .map(OperacaoResponseDTO::new)
+                    .collect(Collectors.toList());
+}
 
     private Conta findAccount(Long accountId) {
         return contaRepository.findById(accountId)
