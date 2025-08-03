@@ -1,59 +1,45 @@
-
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext.jsx';
-import '../static/css/PaginaInicial.css';
+import '../static/css/PaginaInicial.css'; 
+import '../static/css/ModalOperacao.css';
 import pagarIcon from '../assets/img/pagar.png';
 import depositarIcon from '../assets/img/depositar.png';
 import sacarIcon from '../assets/img/sacar.png';
 import cofreIcon from '../assets/img/cofrinho.png';
-import ModalOperacao from '../components/ModalOperacao';
-import FormularioPagar from '../components/FormularioPagar';
-import FormularioSacar from '../components/FormularioSacar';
-import FormularioDepositar from '../components/FormularioDepositar';
 
+import FormularioPagar from '../components/FormularioPagar.jsx'; 
+import FormularioDepositar from '../components/FormularioDepositar.jsx';
+import FormularioSacar from '../components/FormularioSacar.jsx';
 
 export default function PaginaInicial() {
+    
     const { usuario, signOut } = useContext(AuthContext);
     const [saldo, setSaldo] = useState(0);
     const [loadingSaldo, setLoadingSaldo] = useState(true);
     const [modalAberto, setModalAberto] = useState(null); 
     const movimentacoesRef = useRef(null);
 
+    const fetchSaldo = async () => {
+        setLoadingSaldo(true);
+        try {
+            const response = await api.get('/banking-api/operacoes/saldo');
+            setSaldo(response.data);
+        } catch (error) {
+            console.error("Erro ao buscar saldo:", error);
+        } finally {
+            setLoadingSaldo(false);
+        }
+    };
+
     useEffect(() => {
         document.title = 'Internet Banking Home';
-    }, []);
-
-    useEffect(() => {
-        let isMounted = true;
-
         if (usuario) {
-            async function fetchSaldo() {
-                try {
-                    const response = await api.get('/banking-api/operacoes/saldo');
-                    if (isMounted) setSaldo(response.data);
-                } catch (error) {
-                    console.error("Erro ao buscar saldo:", error);
-                } finally {
-                    if (isMounted) setLoadingSaldo(false);
-                }
-            }
             fetchSaldo();
         }
-
-        
-
-        
-
-        return () => {
-            isMounted = false;
-        };
     }, [usuario]);
 
-    const abrirModal = (tipo) => {
-        setModalAberto(tipo);
-    };
 
     if (!usuario) {
         return <div>Carregando...</div>;
@@ -66,11 +52,21 @@ export default function PaginaInicial() {
     };
 
     const movimentacoes = [
-        { data: '24 de Julho', tipo: 'Pagamento realizado', descricao: 'Seguro de Vida', valor: -12.22 },
-        { data: '19 de Julho', tipo: 'Compra no débito', descricao: 'Antonio de Souza Salvador Bra', valor: -8.82 },
-        { data: '19 de Julho', tipo: 'Pix recebido', descricao: 'Iainara Cerqueira dos Santos - PICPAY SERVIÇOES LTDA', valor: 24.52 },
-        { data: '17 de Julho', tipo: 'Pix enviado', descricao: '*********', valor: -7.70 },
+        { data: '24/07', tipo: 'Pagamento realizado', descricao: 'Seguro de Vida', valor: -12.22 },
+        { data: '19/07', tipo: 'Compra no débito', descricao: 'Antonio de Souza Salvador Bra', valor: -8.82 },
+        { data: '19/07', tipo: 'Pix recebido', descricao: 'Iainara Cerqueira dos Santos', valor: 24.52 },
+        { data: '17/07', tipo: 'Pix enviado', descricao: '*********', valor: -7.70 },
     ];
+
+    function abrirModal(tipo) {
+        setModalAberto(tipo);
+        console.log(`Modal aberto: ${tipo}`);
+    }
+    
+    const handleOperacaoSuccess = () => {
+        setModalAberto(null);
+        fetchSaldo();
+    };
 
     function handleSignOut() {
         signOut();
@@ -81,8 +77,8 @@ export default function PaginaInicial() {
     }
 
     function formatValor(valor) {
-        const formatted = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        return valor > 0 ? `+${formatted}` : `–${formatted}`;
+        const formatted = Math.abs(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        return valor >= 0 ? `+ ${formatted}` : `- ${formatted}`;
     }
 
     return (
@@ -136,7 +132,7 @@ export default function PaginaInicial() {
                 </section>
 
                 <section className="quick-operations">
-                    <h4>Opera��es R�pidas</h4>
+                    <h4>Operações Rápidas</h4>
                     <div className="operations-grid">
                        <button className="operation-btn" type="button" onClick={() => abrirModal('pagar')}>
                             <div className="icon-container">
@@ -180,10 +176,26 @@ export default function PaginaInicial() {
                         </div>
                     ))}
                 </section>
+
+                {modalAberto && (
+                    <div className="modal-overlay">
+                        <div className={`modal-operacao-container${modalAberto === 'pagar' ? '-pagar' : ''}`}>
+                            <button className="modal-close-button" onClick={() => setModalAberto(null)}>&times;</button>
+
+                            {modalAberto === 'pagar' && (
+                                <FormularioPagar onSuccess={handleOperacaoSuccess} />
+                            )}
+                            {modalAberto === 'depositar' && (
+                                <FormularioDepositar onSuccess={handleOperacaoSuccess} />
+                            )}
+                            {modalAberto === 'sacar' && (
+                                <FormularioSacar onSuccess={handleOperacaoSuccess} />
+                            )}
+                        </div>
+                    </div>
+                )}
             </main>
         </div>
-    
-        
     );
-    
+
 }
