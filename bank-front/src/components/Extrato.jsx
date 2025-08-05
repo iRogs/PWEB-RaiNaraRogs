@@ -31,6 +31,9 @@ export default function Extrato({ usuario, refreshTrigger }) {
     const [dataInicio, setDataInicio] = useState(dataInicioPadrao);
     const [dataFim, setDataFim] = useState(dataFimPadrao);
     const [tipo, setTipo] = useState('');
+    const [paginaAtual, setPaginaAtual] = useState(0);
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [itensPorPagina] = useState(5); // Ou o valor que preferir
 
     const fetchMovimentacoes = useCallback(async () => {
         if (!usuario) return;
@@ -39,6 +42,9 @@ export default function Extrato({ usuario, refreshTrigger }) {
         const params = {
             inicio: formatarDataParaAPI(dataInicio),
             fim: formatarDataFimParaAPI(dataFim),
+            page: paginaAtual, // Adiciona o parâmetro da página
+            size: itensPorPagina, // Adiciona o tamanho da página
+            sort: 'data,desc' // Exemplo de ordenação
         };
 
         if (tipo) {
@@ -47,24 +53,29 @@ export default function Extrato({ usuario, refreshTrigger }) {
 
         try {
             const response = await api.get('/banking-api/operacoes/extrato', { params });
-            if (Array.isArray(response.data)) {
-                setMovimentacoes(response.data);
+            // A resposta agora é um objeto de página
+            if (response.data && Array.isArray(response.data.content)) {
+                setMovimentacoes(response.data.content); // O array de dados está em 'content'
+                setTotalPaginas(response.data.totalPages); // Armazena o total de páginas
             } else {
                 setMovimentacoes([]);
+                setTotalPaginas(0);
             }
         } catch (error) {
             console.error("Erro ao buscar movimentações:", error);
             setMovimentacoes([]);
+            setTotalPaginas(0);
         } finally {
             setLoading(false);
         }
-    }, [usuario, dataInicio, dataFim, tipo]);
+    }, [usuario, dataInicio, dataFim, tipo, paginaAtual, itensPorPagina]);
 
     useEffect(() => {
         fetchMovimentacoes();
     }, [fetchMovimentacoes, refreshTrigger]);
 
     const handleFiltrarClick = () => {
+        setPaginaAtual(0);
         fetchMovimentacoes();
     };
     
@@ -126,6 +137,25 @@ export default function Extrato({ usuario, refreshTrigger }) {
                     <p className="extrato-vazio">Nenhuma movimentação encontrada para os filtros selecionados.</p>
                 )}
             </div>
+             {totalPaginas > 1 && (
+            <div className="paginacao-controles">
+                <button 
+                    onClick={() => setPaginaAtual(p => p - 1)} 
+                    disabled={paginaAtual === 0 || loading}
+                >
+                    Anterior
+                </button>
+                <span>
+                    Página {paginaAtual + 1} de {totalPaginas}
+                </span>
+                <button 
+                    onClick={() => setPaginaAtual(p => p + 1)} 
+                    disabled={paginaAtual >= totalPaginas - 1 || loading}
+                >
+                    Próxima
+                </button>
+            </div>
+        )}
         </section>
     );
 }

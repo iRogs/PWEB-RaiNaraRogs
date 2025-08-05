@@ -8,14 +8,14 @@ import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.repositories.ContaRepository;
 import ifba.edu.br.bank_api.repositories.OperacaoRepository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class OperacaoService {
@@ -100,19 +100,23 @@ public class OperacaoService {
     return "Pagamento '" + descricao + "' realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
 
-    public List<OperacaoResponseDTO> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim) {
-    Conta conta = findAccount(accountId);
-    List<Operacao> operacoes;
-    if (tipo != null) {
-        operacoes = operacaoRepository.findByContaAndTipoAndDataBetween(conta, tipo, inicio, fim);
-    } else {
-        operacoes = operacaoRepository.findByContaAndDataBetween(conta, inicio, fim);
+     public Page<OperacaoResponseDTO> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim, Pageable pageable) {
+        Conta conta = findAccount(accountId);
+        
+        // A variável 'operacoes' agora é do tipo Page<Operacao> para corresponder ao retorno do repositório.
+        Page<Operacao> operacoes;
+
+        if (tipo != null) {
+            operacoes = operacaoRepository.findByContaAndTipoAndDataBetween(conta, tipo, inicio, fim, pageable);
+        } else {
+            operacoes = operacaoRepository.findByContaAndDataBetween(conta, inicio, fim, pageable);
+        }
+
+        // O objeto Page já possui um método .map() que converte seu conteúdo.
+        // Isso é mais eficiente do que converter para stream.
+        return operacoes.map(OperacaoResponseDTO::new);
     }
-    // Mapeia a lista de entidades para a lista de DTOs
-    return operacoes.stream()
-                    .map(OperacaoResponseDTO::new)
-                    .collect(Collectors.toList());
-}
+
 
     private Conta findAccount(Long accountId) {
         return contaRepository.findById(accountId)

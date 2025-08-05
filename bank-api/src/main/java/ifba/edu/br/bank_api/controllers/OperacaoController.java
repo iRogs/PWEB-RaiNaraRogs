@@ -3,8 +3,9 @@ package ifba.edu.br.bank_api.controllers;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
 
+
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,12 +20,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import ifba.edu.br.bank_api.dtos.OperacaoDTO;
 import ifba.edu.br.bank_api.dtos.OperacaoResponseDTO;
-import ifba.edu.br.bank_api.entities.Operacao;
+
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 import ifba.edu.br.bank_api.entities.Usuario;
 import ifba.edu.br.bank_api.services.JWTokenService;
 import ifba.edu.br.bank_api.services.OperacaoService;
 import jakarta.validation.Valid;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 @RestController
 @RequestMapping("/operacoes")
@@ -75,16 +80,17 @@ public class OperacaoController {
 
 
     @GetMapping("/extrato")
-public ResponseEntity<List<OperacaoResponseDTO>> consultarExtrato(
-    @RequestParam(required = false) TipoOperacao tipo,
-    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
-    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
-) {
-    Usuario usuarioLogado = getUsuarioLogado(); 
-    Long contaId = usuarioLogado.getConta().getId(); 
+    public ResponseEntity<Page<OperacaoResponseDTO>> consultarExtrato(
+        @RequestParam(required = false) TipoOperacao tipo,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim,
+        @PageableDefault(size = 10, sort = {"data"}) Pageable pageable // Adicionado para paginação
+    ) {
+        Usuario usuarioLogado = getUsuarioLogado(); 
+        Long contaId = usuarioLogado.getConta().getId(); 
 
-    List<OperacaoResponseDTO> extrato = operacaoService.extrato(contaId, tipo, inicio, fim);
-    return ResponseEntity.ok(extrato);
-}
+        Page<OperacaoResponseDTO> extrato = operacaoService.extrato(contaId, tipo, inicio, fim, pageable);
+        return ResponseEntity.ok(extrato);
+    }
 
 }
