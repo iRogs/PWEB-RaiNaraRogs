@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @FeignClient("notificacao-service")
 public interface EmailClient {
+
     @RequestMapping(method = RequestMethod.POST,value = "/email/send" )
     public ResponseEntity<String> sendEmail(@RequestBody EmailDTO dto);
     

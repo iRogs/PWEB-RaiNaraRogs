@@ -52,7 +52,7 @@ public class UsuarioService implements UserDetailsService{
                 throw new IllegalArgumentException("CPF inválido");
             }
         } catch (Exception e) {
-            throw new IllegalStateException("Erro no serviço de validação ou Cpf inválido", e);
+            throw new IllegalStateException("Erro no serviço de validação ou CPF inválido", e);
         }
         Conta conta = new Conta();
         conta.setAgencia("0001");
@@ -86,7 +86,6 @@ public class UsuarioService implements UserDetailsService{
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetails user = usuarioRepository.findByEmail(username);
         if (user == null) {
-            // Esta exceção é exigida pelo contrato do Spring Security
             throw new UsernameNotFoundException("Dados de login inválidos!");
         }
         return user;

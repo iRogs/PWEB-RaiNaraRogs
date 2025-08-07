@@ -3,7 +3,7 @@ import api from '../services/api';
 
 import loadingGif from "../assets/img/loading.gif";
 import { useNavigate } from 'react-router-dom';
-import { formatarCPF } from '../utils/FormatarCPF';
+import { formatarCPF } from '../utils/FormatarCPF.jsx';
 
 export default function FormularioRegistro() {
 
@@ -49,7 +49,7 @@ export default function FormularioRegistro() {
                 { headers: { 'Content-Type': 'application/json' }, auth: false }
             );
 
-            setMensagemToast({ texto: 'ParabÃ©ns! Estamos te levando para pÃ¡gina de login...', tipo: 'success' });
+            setMensagemToast({ texto: 'Parabéns! Estamos te levando para a página de login...', tipo: 'success' });
 
             setCpf('');
             setNome('');
@@ -58,10 +58,10 @@ export default function FormularioRegistro() {
 
             setTimeout(() => {
                 navigate('/login');
-            }, 7000);
+            }, 6000);
 
         } catch (error) {
-            console.error("Erro ao cadastrar usuÃ¡rio:", error);
+            console.error("Erro ao cadastrar usuário:", error);
             if (error.response) {
                 setMensagemToast({
                     texto: `Erro ${error.response.status}: ${error.response.data.message || 'Erro ao cadastrar.'}`,

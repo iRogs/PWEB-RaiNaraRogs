@@ -54,7 +54,7 @@ public class OperacaoService {
         conta.setSaldo(conta.getSaldo().add(amount));
         contaRepository.save(conta);
 
-        salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "DepÃ³sito");
+        salvarOperacao(conta, TipoOperacao.DEPOSITO, amount, "DepÃ³sito em conta");
         enviarEmail(conta, "DepÃ³sito", amount);
 
         return "DepÃ³sito realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
@@ -73,12 +73,11 @@ public class OperacaoService {
         conta.setSaldo(conta.getSaldo().subtract(amount));
         contaRepository.save(conta);
 
-        salvarOperacao(conta, TipoOperacao.SAQUE, amount, "Saque");
+        salvarOperacao(conta, TipoOperacao.SAQUE, amount, "Valor retirado da conta");
         enviarEmail(conta, "Saque", amount);
 
         return "Saque realizado com sucesso. Novo saldo: R$ " + conta.getSaldo();
     }
-
 
     public String pagar(Long contaId, BigDecimal valor, String descricao) {
     if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
@@ -102,8 +101,7 @@ public class OperacaoService {
 
      public Page<OperacaoResponseDTO> extrato(Long accountId, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim, Pageable pageable) {
         Conta conta = findAccount(accountId);
-        
-        // A variável 'operacoes' agora é do tipo Page<Operacao> para corresponder ao retorno do repositório.
+  
         Page<Operacao> operacoes;
 
         if (tipo != null) {
@@ -112,8 +110,6 @@ public class OperacaoService {
             operacoes = operacaoRepository.findByContaAndDataBetween(conta, inicio, fim, pageable);
         }
 
-        // O objeto Page já possui um método .map() que converte seu conteúdo.
-        // Isso é mais eficiente do que converter para stream.
         return operacoes.map(OperacaoResponseDTO::new);
     }
 

@@ -12,6 +12,7 @@ public record OperacaoResponseDTO(
     LocalDateTime data,
     String descricao
 ) {
+    
     public OperacaoResponseDTO(Operacao operacao) {
         this(
             operacao.getId(),
@@ -21,4 +22,5 @@ public record OperacaoResponseDTO(
             operacao.getDescricao()
         );
     }
+
 }

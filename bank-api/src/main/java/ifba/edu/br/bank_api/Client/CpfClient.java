@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient("validador-cpf")
 public interface CpfClient {
+    
     @GetMapping("/validar-cpf")
     ResponseEntity<String> validar(@RequestParam("cpf") String cpf);
 

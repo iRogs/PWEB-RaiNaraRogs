@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import api from '../services/api';
+import { formatRawValue, formatToBRL } from '../utils/FormatarValor.jsx';
 
 export default function FormularioPagar({ onSuccess, saldo }) {
+
     const [valorRaw, setValorRaw] = useState('');
     const [descricao, setDescricao] = useState('');
     const [error, setError] = useState('');
@@ -10,14 +12,7 @@ export default function FormularioPagar({ onSuccess, saldo }) {
     const hiddenInputRef = useRef(null);
 
     const handleInputChange = (e) => {
-        const rawValue = e.target.value.replace(/\D/g, '');
-        setValorRaw(rawValue);
-    };
-
-    const formatDisplayValue = () => {
-        if (!valorRaw) return '0,00';
-        const number = parseInt(valorRaw, 10) / 100;
-        return number.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        setValorRaw(formatRawValue(e.target.value));
     };
 
     const handleSubmit = async (e) => {
@@ -65,7 +60,7 @@ export default function FormularioPagar({ onSuccess, saldo }) {
                     <h2 className="titulo">Selecione o valor</h2>
                     <div className="valor">
                         <span className="prefixo">R$</span>
-                        <span>{formatDisplayValue()}</span>
+                        <span>{formatToBRL(valorRaw)}</span>
                     </div>
                     <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponíveis</p>
                 </div>
@@ -89,11 +84,18 @@ export default function FormularioPagar({ onSuccess, saldo }) {
                         disabled={loading}
                     />
                     <button type="submit" className="modal-submit-btn" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {loading ? <span className="loader" /> : success ? 'Sucesso!' : 'Pagar'}
+                        {loading ? <span className="loader" /> : success ? (
+                        <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="#4BB543" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+                            width="24" height="24">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                    ) : 'Pagar'}
                     </button>
                 </form>
                 {error && <p style={{ color: 'white', marginTop: '0.3rem', textShadow: '1px 1px 2px #000' }}>{error}</p>}
             </div>
         </>
     );
+
 }

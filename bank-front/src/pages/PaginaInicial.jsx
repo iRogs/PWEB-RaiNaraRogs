@@ -2,15 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 
-// Componentes
 import FormularioPagar from '../components/FormularioPagar.jsx';
 import FormularioDepositar from '../components/FormularioDepositar.jsx';
 import FormularioSacar from '../components/FormularioSacar.jsx';
-import Extrato from '../components/Extrato';
+import Extrato from '../components/Extrato.jsx';
 
-// Estilos e Ícones
-import '../static/css/PaginaInicial.css';
-import '../static/css/ModalOperacao.css';
+import '../styles/css/PaginaInicial.css';
+import '../styles/css/ModalOperacao.css';
 import pagarIcon from '../assets/img/pagar.png';
 import depositarIcon from '../assets/img/depositar.png';
 import sacarIcon from '../assets/img/sacar.png';
@@ -79,18 +77,16 @@ export default function PaginaInicial() {
                 </aside>
 
                 <main className="main-content">
-                    {/* === PAINEL 1: CABEÇALHO === */}
                     <div className="header-panel">
                         <header className="main-header">
-                            <div className="welcome-message">Olá {usuario.nome}! Seja bem vindo!</div>
+                            <div className="welcome-message">Olá {usuario.nome}!</div>
                             <div className="user-profile">
                                 <div className="user-avatar"></div>
-                                <div className="user-details"><span>{usuario.nome}</span><small>Priority account</small></div>
+                                <div className="user-details"><span>{usuario.nome}</span><small>Conta principal</small></div>
                             </div>
                         </header>
                     </div>
 
-                    {/* === PAINEL 2: CARTÃO DA CONTA === */}
                     <div className="content-panel">
                         <section className="account-overview">
                             <div className="account-card">
@@ -115,12 +111,11 @@ export default function PaginaInicial() {
                         </section>
                     </div>
 
-                    {/* === PAINEL 3: OPERAÇÕES RÁPIDAS === */}
                     <section className="quick-operations content-panel">
                         <h4>Operações Rápidas</h4>
                         <div className="operations-grid">
                             <button className="operation-btn" type="button" onClick={() => abrirModal('pagar')}><div className="icon-container"><img src={pagarIcon} alt="Pagar" /></div>Pagar</button>
-                            <button className="operation-btn" type="button" onClick={() => abrirModal('depositar')}><div className="icon-container"><img src={depositarIcon} alt="Depositar" /></div>Depositar</button>
+                            <button className="operation-btn btn-depositar" type="button" onClick={() => abrirModal('depositar')}><div className="icon-container"><img src={depositarIcon} alt="Depositar" /></div>Depositar</button>
                             <button className="operation-btn" type="button" onClick={() => abrirModal('sacar')}><div className="icon-container"><img src={sacarIcon} alt="Sacar" /></div>Sacar</button>
                             <button className="operation-btn-cofre" type="button"><div className="icon-container"><img src={cofreIcon} alt="Cofre" style={{ filter: 'grayscale(1)' }} /></div>Porquinho</button>
                         </div>
@@ -149,4 +144,5 @@ export default function PaginaInicial() {
             )}
         </>
     );
+
 }

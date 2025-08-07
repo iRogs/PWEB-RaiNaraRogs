@@ -117,4 +117,5 @@ public class Usuario implements UserDetails{
     public void setDataCadastro(LocalDateTime dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+
 }

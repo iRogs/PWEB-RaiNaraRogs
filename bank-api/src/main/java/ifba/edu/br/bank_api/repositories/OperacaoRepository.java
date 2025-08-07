@@ -11,6 +11,8 @@ import ifba.edu.br.bank_api.entities.Operacao;
 import ifba.edu.br.bank_api.entities.TipoOperacao;
 
 public interface OperacaoRepository extends JpaRepository<Operacao, Long> {
+
     Page<Operacao> findByContaAndTipoAndDataBetween(Conta conta, TipoOperacao tipo, LocalDateTime inicio, LocalDateTime fim, Pageable pageable);
     Page<Operacao> findByContaAndDataBetween(Conta conta, LocalDateTime inicio, LocalDateTime fim, Pageable pageable);
+
 }

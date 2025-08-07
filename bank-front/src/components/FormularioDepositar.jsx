@@ -1,22 +1,17 @@
 import React, { useState, useRef } from 'react';
 import api from '../services/api';
+import { formatRawValue, formatToBRL } from '../utils/FormatarValor.jsx';
 
 export default function FormularioDepositar({ onSuccess, saldo }) {
-    const [valorRaw, setValorRaw] = useState(''); // Armazena apenas os números, ex: "1250" para R$ 12,50
+
+    const [valorRaw, setValorRaw] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const hiddenInputRef = useRef(null);
 
     const handleInputChange = (e) => {
-        const rawValue = e.target.value.replace(/\D/g, '');
-        setValorRaw(rawValue);
-    };
-
-    const formatDisplayValue = () => {
-        if (!valorRaw) return '0,00';
-        const number = parseInt(valorRaw, 10) / 100;
-        return number.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        setValorRaw(formatRawValue(e.target.value));
     };
 
     const handleSubmit = async (e) => {
@@ -52,18 +47,16 @@ export default function FormularioDepositar({ onSuccess, saldo }) {
             </div>
 
             <div className="modal-content-area">
-                {/* A área clicável agora foca o input escondido */}
                 <div className="modal-valor-input-area" onClick={() => hiddenInputRef.current?.focus()}>
                     <h2 className="titulo">Selecione o valor</h2>
                     <div className="valor">
                         <span className="prefixo">R$</span>
-                        <span>{formatDisplayValue()}</span>
+                        <span>{formatToBRL(valorRaw)}</span>
                     </div>
-                    <p className="disponivel">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} disponíveis</p>
+                    <p className="disponivel">Seu saldo atual é de R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal-form">
-                    {/* Este input fica escondido, mas é ele quem captura o que você digita */}
                     <input
                         ref={hiddenInputRef}
                         type="tel"
@@ -74,11 +67,18 @@ export default function FormularioDepositar({ onSuccess, saldo }) {
                         autoFocus
                     />
                     <button type="submit" className="modal-submit-btn" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {loading ? <span className="loader" /> : success ? 'Sucesso!' : 'Depositar'}
+                        {loading ? <span className="loader" /> : success ? (
+                        <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="#4BB543" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+                            width="24" height="24">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                    ) : 'Depositar'}
                     </button>
                 </form>
                 {error && <p style={{ color: 'white', marginTop: '0.3rem', textShadow: '1px 1px 2px #000' }}>{error}</p>}
             </div>
         </>
     );
+
 }

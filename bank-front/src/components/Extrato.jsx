@@ -1,22 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
-import '../static/css/Extrato.css';
-
-// Funções de formatação de data para a API
-const formatarDataParaAPI = (dataString) => {
-    if (!dataString) return '';
-    return `${dataString}T00:00:00`;
-};
-
-const formatarDataFimParaAPI = (dataString) => {
-    if (!dataString) return '';
-    return `${dataString}T23:59:59`;
-};
-
-// Funções para gerar as datas padrão
-const getISODateString = (date) => {
-    return date.toISOString().split('T')[0];
-};
+import '../styles/css/Extrato.css';
+import {
+    formatarDataParaAPI,
+    formatarDataFimParaAPI,
+    getISODateString,
+    formatarDataDisplay
+} from '../utils/FormatarData.jsx';
 
 const hoje = new Date();
 const trintaDiasAtras = new Date();
@@ -33,7 +23,7 @@ export default function Extrato({ usuario, refreshTrigger }) {
     const [tipo, setTipo] = useState('');
     const [paginaAtual, setPaginaAtual] = useState(0);
     const [totalPaginas, setTotalPaginas] = useState(0);
-    const [itensPorPagina] = useState(5); // Ou o valor que preferir
+    const [itensPorPagina] = useState(5); 
 
     const fetchMovimentacoes = useCallback(async () => {
         if (!usuario) return;
@@ -42,9 +32,9 @@ export default function Extrato({ usuario, refreshTrigger }) {
         const params = {
             inicio: formatarDataParaAPI(dataInicio),
             fim: formatarDataFimParaAPI(dataFim),
-            page: paginaAtual, // Adiciona o parâmetro da página
-            size: itensPorPagina, // Adiciona o tamanho da página
-            sort: 'data,desc' // Exemplo de ordenação
+            page: paginaAtual, 
+            size: itensPorPagina, 
+            sort: 'data,desc' 
         };
 
         if (tipo) {
@@ -53,10 +43,10 @@ export default function Extrato({ usuario, refreshTrigger }) {
 
         try {
             const response = await api.get('/banking-api/operacoes/extrato', { params });
-            // A resposta agora é um objeto de página
+            
             if (response.data && Array.isArray(response.data.content)) {
-                setMovimentacoes(response.data.content); // O array de dados está em 'content'
-                setTotalPaginas(response.data.totalPages); // Armazena o total de páginas
+                setMovimentacoes(response.data.content); 
+                setTotalPaginas(response.data.totalPages); 
             } else {
                 setMovimentacoes([]);
                 setTotalPaginas(0);
@@ -106,7 +96,6 @@ export default function Extrato({ usuario, refreshTrigger }) {
                         <option value="PAGAMENTO">Pagamento</option>
                     </select>
                 </div>
-                <button onClick={handleFiltrarClick}>Filtrar</button>
             </div>
 
             <div className="extrato-lista">
@@ -114,7 +103,7 @@ export default function Extrato({ usuario, refreshTrigger }) {
                     <p className="loading-extrato">A carregar movimentações...</p>
                 ) : movimentacoes.length > 0 ? (
                     movimentacoes.map((mov) => {
-                        // LÓGICA CORRIGIDA AQUI
+                        
                         const isDeposito = mov.tipo === 'DEPOSITO';
                         const valorClasse = isDeposito ? 'positivo' : 'negativo';
                         const valorSinal = isDeposito ? '+' : '-';
@@ -158,4 +147,5 @@ export default function Extrato({ usuario, refreshTrigger }) {
         )}
         </section>
     );
+    
 }

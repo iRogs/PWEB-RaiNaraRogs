@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import "../static/css/PaginaLoginRegistro.css";
+import "../styles/css/PaginaLoginRegistro.css";
 import characterImg from "../assets/img/character-2.png";
 import FormularioRegistro from "../components/FormularioRegistro";
 
@@ -19,20 +19,19 @@ export default function PaginaRegistro() {
     return (
       <div className="login-container">
         <div className="login-content">
-          {/* Lado esquerdo */}
+
           <div className="login-left animate-slide-in">
-            <h1>FaÃ§a seu cadastro</h1>
+            <h1>Faça seu cadastro</h1>
             <h2>Internet Banking Plataforma</h2>
             <p>
-              Se vocÃª jÃ¡ tem uma conta <br />
-              VocÃª pode fazer <a href="/">login aqui !</a>
+              Se você já tem uma conta <br />
+              Você pode fazer <a href="/">login aqui !</a>
             </p>
             <img src={characterImg} alt="Character" className="character-image" />
           </div>
 
-          {/* Lado direito - formulÃ¡rio */}
           <div className="login-right animate-slide-in">
-            <h2>Insira suas informaÃ§Ãµes</h2>
+            <h2>Insira suas informações</h2>
             <FormularioRegistro />
           </div>
 

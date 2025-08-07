@@ -6,40 +6,37 @@ import PaginaLogin from '../pages/PaginaLogin';
 import PaginaRegistro from '../pages/PaginaRegistro';
 import PaginaInicial from '../pages/PaginaInicial';
 
-
 function PrivateRoute({ children }) {
-  const { signed, loading } = useContext(AuthContext);
+    const { signed, loading } = useContext(AuthContext);
 
-  if (loading) {
-    
-    return <div>A carregar...</div>;
-  }
+    if (loading) {
+        return <div>A carregar...</div>;
+    }
 
-  if (!signed) {
-    
-    return <Navigate to="/login" />;
-  }
+    if (!signed) {
+        return <Navigate to="/login" />;
+    }
 
-  return children;
+    return children;
 }
 
 export function AppRoutes() {
-  return (
-      <Routes>
-        {/* Rotas Públicas */}
-        <Route path="/" element={<PaginaLogin />} />
-        <Route path="/login" element={<PaginaLogin />} />
-        <Route path="/cadastrar" element={<PaginaRegistro />} />
 
-        {/* Rota Privada para o Painel */}
-        <Route 
-          path="/home" 
-          element={
-            <PrivateRoute>
-              <PaginaInicial />
-            </PrivateRoute>
-          } 
-        />
-      </Routes>
-  );
+    return (
+        <Routes>
+            <Route path="/" element={<PaginaLogin />} />
+            <Route path="/login" element={<PaginaLogin />} />
+            <Route path="/cadastrar" element={<PaginaRegistro />} />
+
+            <Route 
+                path="/home" 
+                element={
+                  <PrivateRoute>
+                      <PaginaInicial />
+                  </PrivateRoute>
+                } 
+            />
+        </Routes>
+    );
+
 }
