@@ -84,7 +84,7 @@ public class OperacaoController {
         @RequestParam(required = false) TipoOperacao tipo,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim,
-        @PageableDefault(size = 10, sort = {"data"}) Pageable pageable // Adicionado para paginação
+        @PageableDefault(size = 10, sort = {"data"}) Pageable pageable
     ) {
         Usuario usuarioLogado = getUsuarioLogado(); 
         Long contaId = usuarioLogado.getConta().getId(); 
